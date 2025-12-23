@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /**
+  ~
+  ~ * Webkul Software.
+  ~
+  ~ * @package Mobikul App
+  ~
+  ~ * @Category Mobikul
+  ~
+  ~ * @author Webkul <support@webkul.com>
+  ~
+  ~ * @Copyright (c) Webkul Software Private Limited (https://webkul.com)
+  ~
+  ~ * @license https://store.webkul.com/license.html ASL Licence
+  ~
+  ~ * @link https://store.webkul.com/license.html
+  ~
+  ~ */
+  -->
+
+<!-- Modify this file to customize your launch splash screen -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@android:color/white" />
+
+<!--    You can insert your own image assets here &ndash;&gt;-->
+     <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/ic_launcher_foreground" />
+    </item>
+</layer-list>

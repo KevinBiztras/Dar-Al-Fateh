@@ -1,0 +1,78 @@
+appId: com.company.appname
+
+---
+- tapOn: ${output.categories}
+
+- extendedWaitUntil:
+    visible: "Desks"
+    timeout: 2000
+
+- tapOn: "Desks"
+
+- extendedWaitUntil:
+    visible: ${output.viewAll}
+    timeout: 2000
+
+- tapOn: ${output.viewAll}
+
+- extendedWaitUntil:
+    visible: ${output.sort}
+    timeout: 2000
+
+- tapOn: ${output.sort}
+
+- extendedWaitUntil:
+    visible: ${output.sortValue}
+    timeout: 2000
+
+- tapOn: ${output.sortValue}
+
+- waitForAnimationToEnd:
+    timeout: 100000
+
+- extendedWaitUntil:
+      visible: ${output.sort}
+      timeout: 2000
+
+- tapOn: ${output.sort}
+
+- extendedWaitUntil:
+    visible: "Price - Low to High"
+    timeout: 10000
+
+- tapOn: "Price - Low to High"
+
+# Switch to Grid view
+- extendedWaitUntil:
+    visible: "Grid"
+    timeout: 10000
+
+- tapOn: "Grid"
+
+- tapOn: "Filter"
+
+- extendedWaitUntil:
+      visible: "Apply Filter"
+      timeout: 10000
+
+- tapOn: "Legs\n  (4)"
+
+- tapOn:
+    point: "18%,38%"
+
+- tapOn: "Apply Filter"
+
+- extendedWaitUntil:
+    visible: "Filter"
+    timeout: 2000
+
+- extendedWaitUntil:
+    visible: "Back"
+    timeout: 10000
+
+- tapOn: "Back"
+
+- tapOn: "Home\nTab 1 of 4"
+
+
+

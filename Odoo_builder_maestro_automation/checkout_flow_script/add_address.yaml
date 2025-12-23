@@ -1,0 +1,57 @@
+appId: com.company.appname
+---
+
+- extendedWaitUntil:
+    visible: ${output.shippingAddress}  # Ensure quotes around variable
+    timeout: 100000
+
+- tapOn: ${output.addNewAddress}
+
+- extendedWaitUntil:
+    visible: ${output.contactInformation}  # Ensure quotes around variable
+    timeout: 100000
+
+- tapOn: ${output.yourName}
+- eraseText
+- inputText: "Test"
+- tapOn: ${output.telephone}
+- eraseText
+- inputText: "1234567890"
+- tapOn: ${output.streetAddress}
+- eraseText
+- inputText: "H-28, ARV Park, Sector 63"
+- tapOn: ${output.city}
+- eraseText
+- inputText: "Noida"
+- tapOn: ${output.zipCode}
+- eraseText
+- inputText: "201301"
+
+- scrollUntilVisible:
+      element:
+          text: ${output.country}
+      direction: "DOWN"
+      timeout: 10000
+
+- tapOn: ${output.country}
+
+- scrollUntilVisible:
+    element:
+      text: "India"
+    direction: "DOWN"
+    timeout: 50000
+
+- tapOn: "India"
+
+- tapOn: ${output.state}
+
+- scrollUntilVisible:
+        element:
+          text: "Uttar Pradesh"
+        direction: "DOWN"
+        timeout: 50000
+
+- tapOn: "Uttar Pradesh"
+
+- tapOn: ${output.saveAddress}
+

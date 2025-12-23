@@ -1,0 +1,53 @@
+appId: com.company.appname
+
+---
+
+- extendedWaitUntil:
+    visible: ${output.appName}
+    timeout: 100000
+
+# Open Profile tab
+- tapOn: "Profile Tab 4 of 4"
+
+- extendedWaitUntil:
+    visible: ${output.signOut}
+    timeout: 15000
+
+# Scroll to Sign Out (for reference/verification)
+- scrollUntilVisible:
+      element:
+          text: ${output.signOut}
+      direction: "DOWN"
+      timeout: 10000
+
+# Change Currency to USD($)
+- tapOn: "Currency"
+
+- extendedWaitUntil:
+    visible: "USD($)"
+    timeout: 10000
+
+- tapOn: "USD($)"
+
+# Open Profile tab again
+- tapOn: "Profile Tab 4 of 4"
+
+- extendedWaitUntil:
+    visible: ${output.signOut}
+    timeout: 15000
+
+# Scroll to Sign Out again
+- scrollUntilVisible:
+      element:
+          text: ${output.signOut}
+      direction: "DOWN"
+      timeout: 10000
+
+# Change Language to Arabic
+- tapOn: "Languages"
+
+- extendedWaitUntil:
+    visible: "Arabic / الْعَرَبيّة"
+    timeout: 10000
+
+- tapOn: "Arabic / الْعَرَبيّة"

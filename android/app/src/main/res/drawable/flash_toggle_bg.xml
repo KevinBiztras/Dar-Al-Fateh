@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /**
+  ~
+  ~ * Webkul Software.
+  ~
+  ~ * @package Mobikul App
+  ~
+  ~ * @Category Mobikul
+  ~
+  ~ * @author Webkul <support@webkul.com>
+  ~
+  ~ * @Copyright (c) Webkul Software Private Limited (https://webkul.com)
+  ~
+  ~ * @license https://store.webkul.com/license.html ASL Licence
+  ~
+  ~ * @link https://store.webkul.com/license.html
+  ~
+  ~ */
+  -->
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ic_flash_off" android:state_enabled="true" android:state_checked="false"/>
+    <item android:drawable="@drawable/ic_flash_on" android:state_enabled="true" android:state_checked="true"/>
+</selector>

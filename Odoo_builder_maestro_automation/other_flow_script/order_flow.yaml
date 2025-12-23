@@ -1,0 +1,51 @@
+appId: com.company.appname
+---
+
+- assertVisible: ${output.allOrders}
+
+- tapOn: ${output.allOrders}
+
+- waitForAnimationToEnd:
+    timeout: 100000
+- assertVisible: ${output.details}
+
+- tapOn: ${output.details}
+
+- waitForAnimationToEnd:
+    timeout: 100000
+
+- assertVisible: ${output.placedOn}
+
+- tapOn: "Back"
+
+- waitForAnimationToEnd:
+    timeout: 100000
+- assertVisible: ${output.reviews}
+
+- tapOn: ${output.reviews}
+
+- waitForAnimationToEnd:
+    timeout: 100000
+- assertVisible: "Rating"
+
+- tapOn:
+    point: 23%,39%
+
+- tapOn: "Write Review Title*"
+
+- inputText: "test"
+
+- tapOn: "Write your review*"
+
+- inputText: "Nice Product"
+
+- tapOn: "SUBMIT"
+
+- waitForAnimationToEnd:
+    timeout: 10000
+
+- tapOn: "Back"
+
+
+- tapOn: "Back"
+

@@ -1,0 +1,49 @@
+appId: com.company.appname
+---
+
+
+- tapOn: ${output.createAnAccount}
+- tapOn: ${output.emailKey}
+- eraseText
+- inputText: ${output.emailValue}
+- tapOn: ${output.nameKey}
+- eraseText
+- inputText: "test"
+- tapOn: ${output.passwordKey}
+- eraseText
+- inputText: ${output.passwordValue}
+- tapOn: ${output.confirmPasswordKey}
+- eraseText
+- inputText: ${output.passwordValue}
+- hideKeyboard
+
+- tapOn: ${output.createAnAccount}
+
+- extendedWaitUntil:
+    visible: ${output.createSuccessfully}
+    timeout: 100000
+
+- assertVisible: ${output.appName}
+
+- assertVisible: ${output.profile}
+
+- tapOn: ${output.profile}
+
+- scrollUntilVisible:
+      element:
+          text: ${output.signOut}
+      direction: "DOWN"
+      timeout: 10000
+
+- tapOn: ${output.signOut}
+- tapOn: ${output.ok}
+
+- assertVisible: ${output.appName}
+
+- assertVisible: ${output.profile}
+
+- tapOn: ${output.profile}
+
+- tapOn: ${output.signIn}
+
+

@@ -1,0 +1,20 @@
+appId: com.company.appname
+---
+
+- extendedWaitUntil:
+    visible: ${output.shippingAddress}
+    timeout: 100000
+
+- runFlow:
+    when:
+      visible: ${output.shippingAddress}
+    file: add_address.yaml
+
+- runFlow:
+    when:
+      visible: "Shipping Method"
+    commands:
+      - tapOn: ${output.proceed}
+
+#- tapOn: ${output.proceed}
+

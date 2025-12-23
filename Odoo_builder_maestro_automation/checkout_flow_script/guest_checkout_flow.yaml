@@ -1,0 +1,87 @@
+appId: com.company.appname
+---
+- assertVisible: ${output.appName}
+
+- assertVisible: ${output.profile}
+
+- tapOn: ${output.profile}
+
+- scrollUntilVisible:
+    element:
+      text: ${output.signOut}
+    direction: "DOWN"
+    timeout: 10000
+
+- tapOn: ${output.signOut}
+- tapOn: ${output.ok}
+
+- assertVisible: ${output.appName}
+
+- runFlow: add_to_cart.yaml  # for add to cart
+
+- tapOn: ${output.proceed}
+
+- extendedWaitUntil:
+    visible: ${output.contactInformation}  # Ensure quotes around variable
+    timeout: 100000
+
+- tapOn: ${output.yourName}
+- eraseText
+- inputText: "Test"
+
+- tapOn: ${output.guestEmailKey}
+- eraseText
+- inputText: "test@mail.com"
+
+- tapOn: ${output.telephone}
+- eraseText
+- inputText: "1234567890"
+
+- tapOn: ${output.streetAddress}
+- eraseText
+- inputText: "H-28, ARV Park, Sector 63"
+- tapOn: ${output.city}
+- eraseText
+- inputText: "Noida"
+- tapOn: ${output.zipCode}
+- eraseText
+- inputText: "201301"
+
+- scrollUntilVisible:
+    element:
+      text: ${output.country}
+    direction: "DOWN"
+    timeout: 10000
+
+- tapOn: ${output.country}
+
+- scrollUntilVisible:
+    element:
+      text: "India"
+    direction: "DOWN"
+    timeout: 50000
+
+- tapOn: "India"
+
+- tapOn: ${output.state}
+
+- scrollUntilVisible:
+    element:
+      text: "Uttar Pradesh"
+    direction: "DOWN"
+    timeout: 50000
+
+- tapOn: "Uttar Pradesh"
+
+- tapOn: ${output.proceed}
+
+- extendedWaitUntil:
+    visible: ${output.shippingAddress}
+    timeout: 100000
+- runFlow:
+    when:
+      visible: "Shipping Method"
+    commands:
+      - tapOn: ${output.proceed}
+
+- runFlow: payment_checkout_flow.yaml

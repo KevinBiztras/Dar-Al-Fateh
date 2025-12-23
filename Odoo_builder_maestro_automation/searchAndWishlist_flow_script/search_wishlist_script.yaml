@@ -1,0 +1,60 @@
+appId: com.company.appname
+---
+
+- extendedWaitUntil:
+    visible: ${output.appName}
+    timeout: 100000
+
+- tapOn:
+    id: "search_icon"
+
+- extendedWaitUntil:
+    visible: ${output.relatedProduct}
+    timeout: 100000
+
+- assertVisible: ${output.search}
+
+- tapOn: ${output.search}
+- eraseText
+- inputText: "test product"
+
+- extendedWaitUntil:
+    visible: ${output.searchProduct}
+    timeout: 500000
+
+
+- tapOn: ${output.searchProduct}
+
+- extendedWaitUntil:
+    visible: ${output.wishlist}
+    timeout: 100000
+
+- tapOn: ${output.wishlist}
+
+- waitForAnimationToEnd:
+    timeout: 100000
+
+- tapOn: "COMPARE"
+
+- waitForAnimationToEnd:
+    timeout: 100000
+
+- tapOn:
+    id: "product-cart"
+
+- tapOn: "GO TO WISHLIST"
+
+- waitForAnimationToEnd:
+    timeout: 10000
+
+- tapOn:
+    id: "wishlist_delete_icon"
+
+- tapOn: ${output.ok}
+
+- waitForAnimationToEnd:
+    timeout: 100000
+
+- tapOn: "Back"
+
+- tapOn: "CONTINUE SHOPPING"

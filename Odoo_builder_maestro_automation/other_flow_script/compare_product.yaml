@@ -1,0 +1,25 @@
+appId: com.company.appname
+---
+
+
+- scrollUntilVisible:
+      element:
+          text: ${output.compareProduct}
+      direction: "DOWN"
+      timeout: 10000
+
+- tapOn: ${output.compareProduct}
+- waitForAnimationToEnd:
+        timeout: 100000
+- extendedWaitUntil:
+      visible: ${output.removeAllItems}
+      timeout: 100000
+
+- tapOn: ${output.removeAllItems}
+- waitForAnimationToEnd:
+        timeout: 100000
+- tapOn: ${output.continueShopping}
+- waitForAnimationToEnd:
+        timeout: 100000
+# Full value manage dynamically
+- runFlow: catalog_product_flow.yaml

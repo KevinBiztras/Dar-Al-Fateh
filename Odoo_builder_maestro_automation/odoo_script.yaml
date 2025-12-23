@@ -1,0 +1,34 @@
+appId: com.company.appname
+---
+- launchApp:
+    clearState: true
+- runScript: scripts/app_constant.js
+
+- extendedWaitUntil:
+    visible: ${output.skip} # Ensure quotes around variable
+    timeout: 100000
+- tapOn: ${output.skip}
+
+
+# Create account Script Starts
+- runFlow:
+    when:
+      visible: ${output.signInKey}
+    file: login_flow_script/create_account_script.yaml
+
+
+# Login Script
+- runFlow:
+      when:
+          visible: ${output.signInKey}
+      file: login_flow_script/login_script.yaml
+
+# checkout flow
+- runFlow: checkout_flow_script/add_to_cart_flow.yaml
+- runFlow: checkout_flow_script/shipping_flow.yaml
+- runFlow: checkout_flow_script/payment_checkout_flow.yaml
+- runFlow: searchAndWishlist_flow_script/search_wishlist_script.yaml
+- runFlow: other_flow_script/change_password.yaml
+- runFlow: checkout_flow_script/guest_checkout_flow.yaml
+- runFlow: other_flow_script/change_language.yaml
+

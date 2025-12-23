@@ -1,0 +1,89 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "kotlin-kapt"
+    id "dev.flutter.flutter-gradle-plugin"
+    //id "com.google.gms.google-services"
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+}
+
+android {
+    compileSdk 36
+    ndkVersion "29.0.13113456 rc1"
+
+    namespace "com.webkul.flutter_project_structure"
+
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com.company.appname"
+        // minSdkVersion flutter.minSdkVersion
+        minSdkVersion flutter.minSdkVersion
+        // targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion 36
+        versionCode 1
+        versionName "1.0.0"
+        signingConfig signingConfigs.debug
+    }
+    dataBinding {
+        enabled = true
+    }
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.debug
+        }
+    }
+    dexOptions {
+        javaMaxHeapSize "2g"
+    }
+    lint {
+        checkReleaseBuilds false
+    }
+
+}
+
+flutter {
+    source '../..'
+}
+
+dependencies {
+    implementation platform('com.google.firebase:firebase-bom:34.6.0')
+    implementation 'com.google.firebase:firebase-analytics:23.0.0'
+    //ML KIT
+    api 'com.google.android.gms:play-services-mlkit-text-recognition:19.0.1'
+    api 'com.google.mlkit:image-labeling:17.0.9'
+    // Image labeling custom
+    api 'com.google.mlkit:image-labeling-custom:17.0.3'
+    //===Ar Core
+    implementation "io.github.sceneview:arsceneview:2.3.0"
+    implementation "io.github.sceneview:sceneview:2.3.0"
+
+    //---------------------------------------//
+    implementation 'com.google.android.material:material:1.13.0'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+
+}
+secrets {
+    propertiesFileName = "secrets.properties"
+    defaultPropertiesFileName = "local.defaults.properties"
+}

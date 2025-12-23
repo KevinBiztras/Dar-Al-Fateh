@@ -1,0 +1,35 @@
+appId: com.company.appname
+---
+
+- runFlow: add_to_cart.yaml  # for add to cart
+
+- scrollUntilVisible:
+    element:
+      text: ${output.emptyCart}
+    direction: "DOWN"
+    timeout: 10000
+- tapOn: ${output.emptyCart}
+
+- tapOn: ${output.ok}
+
+- extendedWaitUntil:
+    visible: ${output.emptyCartMsg}
+    timeout: 100000
+
+- tapOn: ${output.continueShopping}
+- runFlow: add_to_cart.yaml
+- runFlow:
+    when:
+      visible: "Qty: 1"
+    commands:
+      - tapOn: "Qty: 1"
+
+- tapOn: "4"
+
+- extendedWaitUntil:
+    visible: ${output.amtToPaid}
+    timeout: 100000
+
+- tapOn: ${output.proceed}
+
+

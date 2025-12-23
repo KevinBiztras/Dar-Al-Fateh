@@ -1,0 +1,32 @@
+appId: com.company.appname
+---
+
+- scrollUntilVisible:
+    element:
+      text: ${output.productData}
+    direction: "DOWN"
+    timeout: 30000
+
+- tapOn: ${output.productData}
+
+- scrollUntilVisible:
+      element:
+          text: ${output.quantity}
+      direction: "DOWN"
+      timeout: 10000
+
+- extendedWaitUntil:
+    visible: ${output.addToCart}
+    timeout: 100000
+
+- tapOn: ${output.addToCart}
+
+- waitForAnimationToEnd:
+    timeout: 100000
+
+- tapOn:
+    id: "product-cart"
+
+- extendedWaitUntil:
+    visible: ${output.amtToPaid}  # Ensure quotes around variable
+    timeout: 100000

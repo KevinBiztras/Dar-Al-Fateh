@@ -1,0 +1,14 @@
+appId: com.company.appname
+---
+
+- extendedWaitUntil:
+    visible: ${output.amtToPaid}
+    timeout: 100000
+
+- tapOn: ${output.placeOrder}
+
+- extendedWaitUntil:
+    visible: ${output.continueShopping}
+    timeout: 100000
+
+- tapOn: ${output.continueShopping}
