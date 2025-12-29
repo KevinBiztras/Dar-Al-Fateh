@@ -3,10 +3,10 @@ name: iOS Build
 on:
   push:
     branches:
-      - main  # Change this to your default branch
+      - main  # Change this to your default branch if needed
   pull_request:
     branches:
-      - main  # Change this to your default branch
+      - main  # Change this to your default branch if needed
 
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          flutter-version: '3.38.3'  # Specify the exact Flutter version you want to use
 
       - name: Install dependencies
         run: flutter pub get
