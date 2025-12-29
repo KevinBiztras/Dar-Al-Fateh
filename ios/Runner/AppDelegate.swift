@@ -4,7 +4,7 @@ import Flutter
 import GoogleMaps
 import QuickLook
 import AuthenticationServices
-import Firebase
+// import Firebase
 import SwiftKeychainWrapper
 import flutter_local_notifications
 
@@ -33,7 +33,7 @@ import flutter_local_notifications
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-      FirebaseApp.configure()
+    //   FirebaseApp.configure()
       FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
                GeneratedPluginRegistrant.register(with: registry)
              }
