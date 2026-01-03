@@ -36,8 +36,10 @@ import 'package:bloc/bloc.dart';
  * @link https://store.webkul.com/license.html
 
  */
-import 'package:equatable/equatable.dart';import 'package:flutter_project_structure/models/HomeScreenModel.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_project_structure/models/HomeScreenModel.dart';
 import 'package:flutter_project_structure/screens/home/bloc/home_screen_repository.dart';
+import '../../../constants/app_constants.dart';
 import '../../../local_database/hive_constants.dart';
 import '../../../local_database/hive_service.dart';
 
@@ -76,6 +78,9 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
   }
 }
 Future<HomePageData?> getHomeDataFromHiveDB() async {
+  if (ApiConstant.baseUrl.contains('example.com')) {
+    return null;
+  }
   HomePageData? model;
 
   final HiveService hiveService = HiveService();

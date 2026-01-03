@@ -528,7 +528,7 @@ class _ProductScreenState extends State<ProductScreen> {
   ProductScreenModel? productPageData;
   AppLocalizations? _localizations;
   bool isLoading = false;
-  int? counter = 0;
+  int? counter = 1;
   bool? addedToWishlist = false;
   BaseModel? baseModel;
   Products? _passedProduct;
@@ -888,7 +888,14 @@ class _ProductScreenState extends State<ProductScreen> {
                       // Add to Cart Buttons
                       AddToCartButtonView(
                         productPageBloc,
-                        productPageData?.productId ?? 0,
+                        ApiConstant.baseUrl.contains('example.com')
+                            ? (int.tryParse(
+                                    widget.arguments[productIdKey]?.toString() ??
+                                        '') ??
+                                productPageData?.templateId ??
+                                productPageData?.productId ??
+                                0)
+                            : (productPageData?.productId ?? 0),
                         productPageData?.name ?? '',
                         counter!,
                       ),

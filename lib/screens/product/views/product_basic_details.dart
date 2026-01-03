@@ -41,6 +41,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project_structure/constants/app_constants.dart';
 import 'package:flutter_project_structure/constants/app_string_constant.dart';
+import 'package:flutter_project_structure/customWidgtes/dialog_helper.dart';
 import 'package:flutter_project_structure/helper/app_localizations.dart';
 import 'package:flutter_project_structure/helper/firebase_analytics.dart';
 import 'package:flutter_project_structure/helper/open_bottom_model_sheet.dart';
@@ -50,7 +51,6 @@ import 'package:flutter_project_structure/screens/product/views/rating_container
 import 'package:share_plus/share_plus.dart';
 import '../../../constants/arguments_map.dart';
 import '../../../constants/route_constant.dart';
-import '../../../customWidgtes/dialog_helper.dart';
 import '../../../helper/alert_message.dart';
 import '../../../helper/app_shared_pref.dart';
 import '../bloc/product_screen_event.dart';
@@ -225,29 +225,25 @@ class ProductPageBasicDetailsViewState
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    if (AppSharedPref().getIfLogin() != null &&
-                        AppSharedPref().getIfLogin() == true) {
-                      !widget.addedToWishlist
-                          ? widget.productPageBloc?.add(AddToWishlistEvent(
-                              widget.product?.productId.toString() ?? '',
-                              widget.product?.name ?? ""))
-                          : widget.productPageBloc?.add(RemoveFromWishlistEvent(
-                              widget.product?.productId.toString()));
-                      widget.productPageBloc?.emit(ProductScreenInitial());
-                      // AnalyticsEventsFirebase().addWishListEvent(
-                      //     widget.product?.productId.toString() ?? "",
-                      //     widget.product?.name ?? "",
-                      //     widget.product?.productCount ?? 1);
-                    } else {
-                      DialogHelper.confirmationDialog(
-                          "${_localizations?.translate(AppStringConstant.signInToContinue)}",
-                          context,
-                          _localizations, onConfirm: () async {
-                        Navigator.pushNamed(context, loginSignup,
-                            arguments: false);
-                      });
+                    final bool isLoggedIn =
+                        AppSharedPref().getIfLogin() == true;
+                    if (!isLoggedIn) {
+                      AppSharedPref().setGuestCheckout(true);
                     }
-                  },
+                    !widget.addedToWishlist
+                        ? widget.productPageBloc?.add(AddToWishlistEvent(
+                            (widget.product?.templateId ??
+                                    widget.product?.productId ??
+                                    0)
+                                .toString(),
+                            widget.product?.name ?? ""))
+                        : widget.productPageBloc?.add(RemoveFromWishlistEvent(
+                            (widget.product?.templateId ??
+                                    widget.product?.productId ??
+                                    0)
+                                .toString()));
+                    widget.productPageBloc?.emit(ProductScreenInitial());
+                    },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

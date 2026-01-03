@@ -147,11 +147,17 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Icon(Icons.search),
             ),
           ),
+          // IconButton(
+          //   onPressed: () {
+          //     notificationBottomModelSheet(context);
+          //   },
+          //   icon: const Icon(Icons.notifications),
+          // ),
           IconButton(
             onPressed: () {
-              notificationBottomModelSheet(context);
+              Navigator.pushNamed(context, wishlist);
             },
-            icon: const Icon(Icons.notifications),
+            icon: const Icon(Icons.favorite_border),
           ),
         ],
       ),

@@ -237,6 +237,36 @@ class AppSharedPref {
     return globalStorage.read("guestCartCount");
   }
 
+  void setGuestCartItems(List<Map<String, dynamic>> items) {
+    globalStorage.write("guestCartItems", items);
+  }
+
+  List<Map<String, dynamic>> getGuestCartItems() {
+    final raw = globalStorage.read("guestCartItems");
+    if (raw is List) {
+      return raw
+          .whereType<Map>()
+          .map((item) => Map<String, dynamic>.from(item))
+          .toList();
+    }
+    return [];
+  }
+
+  void setGuestWishlistItems(List<Map<String, dynamic>> items) {
+    globalStorage.write("guestWishlistItems", items);
+  }
+
+  List<Map<String, dynamic>> getGuestWishlistItems() {
+    final raw = globalStorage.read("guestWishlistItems");
+    if (raw is List) {
+      return raw
+          .whereType<Map>()
+          .map((item) => Map<String, dynamic>.from(item))
+          .toList();
+    }
+    return [];
+  }
+
   setAppLanguage(String language) {
     globalStorage.write(appLanguage, language);
     print("AppLanguage---Write>>${globalStorage.read(appLanguage)}");

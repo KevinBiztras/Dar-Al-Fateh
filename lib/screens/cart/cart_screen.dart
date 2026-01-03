@@ -68,23 +68,25 @@ class _CartScreenState extends State<CartScreen> {
         AppSharedPref().getGuestCheckout()) {
       cartScreenBloc?.add(const CartScreenDataFetchEvent());
     } else {
-      DialogHelper.confirmationDialog(
-          "${_localizations?.translate(AppStringConstant.signInToContinue)}",
-          context,
-          _localizations, onConfirm: () {
-        Navigator.pushNamed(context, loginSignup, arguments: false)
-            .then((value) {
-          if (value == true) {
-            cartScreenBloc?.add(const CartScreenDataFetchEvent());
-          } else {
-            Navigator.pushNamedAndRemoveUntil(context, navBar, (route) => false,
-                arguments: 0);
-          }
-        });
-      }, onCancel: () {
-        Navigator.pushNamedAndRemoveUntil(context, navBar, (route) => false,
-            arguments: 0);
-      });
+      //     DialogHelper.confirmationDialog(
+      //     "${_localizations?.translate(AppStringConstant.signInToContinue)}",
+      //     context,
+      //     _localizations, onConfirm: () {
+      //   Navigator.pushNamed(context, loginSignup, arguments: false)
+      //       .then((value) {
+      //     if (value == true) {
+      //       cartScreenBloc?.add(const CartScreenDataFetchEvent());
+      //     } else {
+      //       Navigator.pushNamedAndRemoveUntil(context, navBar, (route) => false,
+      //           arguments: 0);
+      //     }
+      //   });
+      // }, onCancel: () {
+      //   Navigator.pushNamedAndRemoveUntil(context, navBar, (route) => false,
+      //       arguments: 0);
+      // });
+      AppSharedPref().setGuestCheckout(true);
+      cartScreenBloc?.add(const CartScreenDataFetchEvent());
     }
   }
 
@@ -170,7 +172,7 @@ class _CartScreenState extends State<CartScreen> {
                 });
               }
             } else if (state is CartScreenError) {
-              isLoading = true;
+              isLoading = false;
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 AlertMessage.showError(state.message ?? '', context);
               });
@@ -212,7 +214,8 @@ class _CartScreenState extends State<CartScreen> {
                   children: <Widget>[
                     Expanded(
                       child: SingleChildScrollView(
-                        child: CartMainView(
+                        child:
+                         CartMainView(
                             cartViewModel, _localizations, cartScreenBloc),
                       ),
                     ),

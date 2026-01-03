@@ -72,11 +72,11 @@ class _NavBarViewState extends State<NavBarView> {
         ],
         child: HomeScreen(),
       ),
-      BlocProvider(
-        create: (context) =>
-            CategoryScreenBloc(CategoryScreenRepositoryImp()),
-        child: CategoryScreen(),
-      ),
+      // BlocProvider(
+      //   create: (context) =>
+      //       CategoryScreenBloc(CategoryScreenRepositoryImp()),
+      //   child: CategoryScreen(),
+      // ),
       BlocProvider(
         create: (context) =>
             CartScreenBloc(repository: CartScreenRepositoryImp()),

@@ -65,6 +65,93 @@ import '../models/ShippingMethodModel.dart';
 
 part 'api_client.g.dart';
 
+const List<Map<String, dynamic>> _demoProducts = [
+  {
+    "templateId": 1,
+    "name": "Butternut",
+    "priceUnit": "29.99",
+    "priceReduce": "19.99",
+    "productId": 1,
+    "thumbNail": "assets/images/Butternut.png",
+  },
+  {
+    "templateId": 2,
+    "name": "Beetroot",
+    "priceUnit": "39.99",
+    "priceReduce": "29.99",
+    "productId": 2,
+    "thumbNail": "assets/images/beetroot.png",
+  },
+  {
+    "templateId": 3,
+    "name": "Broccoli",
+    "priceUnit": "49.99",
+    "priceReduce": "39.99",
+    "productId": 3,
+    "thumbNail": "assets/images/broccoli.png",
+  },
+  {
+    "templateId": 4,
+    "name": "Pumpkin",
+    "priceUnit": "49.99",
+    "priceReduce": "39.99",
+    "productId": 4,
+    "thumbNail": "assets/images/pumpkin.png",
+  },
+  {
+    "templateId": 5,
+    "name": "Cucumber",
+    "priceUnit": "49.99",
+    "priceReduce": "39.99",
+    "productId": 5,
+    "thumbNail": "assets/images/cucumber.png",
+  },
+  {
+    "templateId": 6,
+    "name": "Fresh spinach",
+    "priceUnit": "49.99",
+    "priceReduce": "39.99",
+    "productId": 6,
+    "thumbNail": "assets/images/fresh_spinach.png",
+  },
+  {
+    "templateId": 7,
+    "name": "Green leaves",
+    "priceUnit": "49.99",
+    "priceReduce": "39.99",
+    "productId": 7,
+    "thumbNail": "assets/images/green_leaves.png",
+  },
+  {
+    "templateId": 8,
+    "name": "Pumkin green",
+    "priceUnit": "49.99",
+    "priceReduce": "39.99",
+    "productId": 8,
+    "thumbNail": "assets/images/pumkin_green.png",
+  },
+  {
+    "templateId": 9,
+    "name": "Water melon yellow",
+    "priceUnit": "49.99",
+    "priceReduce": "39.99",
+    "productId": 9,
+    "thumbNail": "assets/images/water_melon_yellow.png",
+  },
+  {
+    "templateId": 10,
+    "name": "Water melon",
+    "priceUnit": "49.99",
+    "priceReduce": "39.99",
+    "productId": 10,
+    "thumbNail": "assets/images/water_melon.png",
+  },
+];
+
+double _parsePrice(String? value) {
+  return double.tryParse(value ?? "") ?? 0.0;
+}
+
 @RestApi(baseUrl: ApiConstant.baseUrl)
 abstract class ApiClient {
   factory ApiClient({String? baseUrl, bool isFromCache = false}) {
@@ -140,105 +227,8 @@ abstract class ApiClient {
                       "title": "New Arrivals",
                       "slider_mode": "default",
                       "url": "",
-                      "products": [
-                        {
-                          "templateId": 1,
-                          "name": "Butternut",
-                          "priceUnit": "29.99",
-                          "priceReduce": "19.99",
-                          "productId": 1,
-                          "thumbNail": "assets/images/Butternut.png",
-                        },
-                        {
-                          "templateId": 2,
-                          "name": "Beetroot",
-                          "priceUnit": "39.99",
-                          "priceReduce": "29.99",
-                          "productId": 2,
-                          "thumbNail": "assets/images/beetroot.png",
-                        },
-                        {
-                          "templateId": 3,
-                          "name": "Broccoli",
-                          "priceUnit": "49.99",
-                          "priceReduce": "39.99",
-                          "productId": 3,
-                          "thumbNail": "assets/images/broccoli.png",
-                        },
-                        {
-                          "templateId": 4,
-                          "name": "Sample Product 3",
-                          "priceUnit": "49.99",
-                          "priceReduce": "39.99",
-                          "productId": 3,
-                          "thumbNail":
-                              "https://via.placeholder.com/300/45B7D1/FFFFFF?text=Product+3",
-                        },
-                        {
-                          "templateId": 5,
-                          "name": "Pumpkin",
-                          "priceUnit": "49.99",
-                          "priceReduce": "39.99",
-                          "productId": 3,
-                          "thumbNail": "assets/images/pumpkin.png",
-                        },
-                        {
-                          "templateId": 6,
-                          "name": "Cucumber",
-                          "priceUnit": "49.99",
-                          "priceReduce": "39.99",
-                          "productId": 3,
-                          "thumbNail": "assets/images/cucumber.png",
-                        },
-                        {
-                          "templateId": 7,
-                          "name": "Fresh spinach",
-                          "priceUnit": "49.99",
-                          "priceReduce": "39.99",
-                          "productId": 3,
-                          "thumbNail": "assets/images/fresh_spinach.png",
-                        },
-                        {
-                          "templateId": 8,
-                          "name": "Green leaves",
-                          "priceUnit": "49.99",
-                          "priceReduce": "39.99",
-                          "productId": 3,
-                          "thumbNail": "assets/images/green_leaves.png",
-                        },
-                        {
-                          "templateId": 9,
-                          "name": "Pumkin green",
-                          "priceUnit": "49.99",
-                          "priceReduce": "39.99",
-                          "productId": 3,
-                          "thumbNail": "assets/images/pumkin_green.png",
-                        },
-                        {
-                          "templateId": 10,
-                          "name": "Water melon yellow",
-                          "priceUnit": "49.99",
-                          "priceReduce": "39.99",
-                          "productId": 3,
-                          "thumbNail": "assets/images/water_melon_yellow.png",
-                        },
-                        {
-                          "templateId": 10,
-                          "name": "Water melon",
-                          "priceUnit": "49.99",
-                          "priceReduce": "39.99",
-                          "productId": 3,
-                          "thumbNail": "assets/images/water_melon.png",
-                        },
-                        {
-                          "templateId": 11,
-                          "name": "Fresh spinach",
-                          "priceUnit": "49.99",
-                          "priceReduce": "39.99",
-                          "productId": 3,
-                          "thumbNail": "assets/images/fresh_spinach.png",
-                        },
-                      ],
+                      "products":
+                          _demoProducts.map((item) => Map<String, dynamic>.from(item)).toList(),
                     },
                   ],
                 },
@@ -345,94 +335,331 @@ abstract class ApiClient {
               "available_max_price": 49.99,
               "min_price": 19.99,
               "max_price": 49.99,
-              "products": [
-                {
-                  "templateId": 1,
-                  "name": "Butternut",
-                  "priceUnit": "29.99",
-                  "priceReduce": "19.99",
-                  "productId": 1,
-                  "thumbNail": "assets/images/Butternut.png",
-                },
-                {
-                  "templateId": 2,
-                  "name": "Beetroot",
-                  "priceUnit": "39.99",
-                  "priceReduce": "29.99",
-                  "productId": 2,
-                  "thumbNail": "assets/images/beetroot.png",
-                },
-                {
-                  "templateId": 3,
-                  "name": "Broccoli",
-                  "priceUnit": "49.99",
-                  "priceReduce": "39.99",
-                  "productId": 3,
-                  "thumbNail": "assets/images/broccoli.png",
-                },
-                {
-                  "templateId": 4,
-                  "name": "Pumpkin",
-                  "priceUnit": "49.99",
-                  "priceReduce": "39.99",
-                  "productId": 4,
-                  "thumbNail": "assets/images/pumpkin.png",
-                },
-                {
-                  "templateId": 5,
-                  "name": "Cucumber",
-                  "priceUnit": "49.99",
-                  "priceReduce": "39.99",
-                  "productId": 5,
-                  "thumbNail": "assets/images/cucumber.png",
-                },
-                {
-                  "templateId": 6,
-                  "name": "Fresh spinach",
-                  "priceUnit": "49.99",
-                  "priceReduce": "39.99",
-                  "productId": 6,
-                  "thumbNail": "assets/images/fresh_spinach.png",
-                },
-                {
-                  "templateId": 7,
-                  "name": "Green leaves",
-                  "priceUnit": "49.99",
-                  "priceReduce": "39.99",
-                  "productId": 7,
-                  "thumbNail": "assets/images/green_leaves.png",
-                },
-                {
-                  "templateId": 8,
-                  "name": "Pumkin green",
-                  "priceUnit": "49.99",
-                  "priceReduce": "39.99",
-                  "productId": 8,
-                  "thumbNail": "assets/images/pumkin_green.png",
-                },
-                {
-                  "templateId": 9,
-                  "name": "Water melon yellow",
-                  "priceUnit": "49.99",
-                  "priceReduce": "39.99",
-                  "productId": 9,
-                  "thumbNail": "assets/images/water_melon_yellow.png",
-                },
-                {
-                  "templateId": 10,
-                  "name": "Water melon",
-                  "priceUnit": "49.99",
-                  "priceReduce": "39.99",
-                  "productId": 10,
-                  "thumbNail": "assets/images/water_melon.png",
-                },
-              ],
+              "products":
+                  _demoProducts.map((item) => Map<String, dynamic>.from(item)).toList(),
             };
 
             return handler.resolve(
               Response(
                 requestOptions: options,
                 data: mockData,
+                statusCode: 200,
+              ),
+            );
+          }
+          if (isPlaceholderHost &&
+              options.path.contains('mobikul/mycart/addToCart')) {
+            Map<String, dynamic> payload = {};
+            if (options.data is String) {
+              payload = json.decode(options.data as String);
+            } else if (options.data is Map) {
+              payload = Map<String, dynamic>.from(options.data as Map);
+            }
+            final int productId =
+                int.tryParse(payload["productId"].toString()) ?? 0;
+            final int addQty =
+                int.tryParse(payload["add_qty"].toString()) ?? 1;
+
+            final List<Map<String, dynamic>> cartItems =
+                AppSharedPref().getGuestCartItems();
+            final Map<String, dynamic> product = _demoProducts.firstWhere(
+              (item) => item["productId"] == productId,
+              orElse: () => {},
+            );
+            if (product.isNotEmpty) {
+              final int? existingIndex = cartItems.indexWhere(
+                (item) => item["productId"] == productId,
+              );
+              if (existingIndex != -1) {
+                final Map<String, dynamic> existingItem = cartItems[existingIndex!];
+                final int currentQty =
+                    int.tryParse(existingItem["qty"].toString()) ?? 0;
+                existingItem["qty"] = currentQty + addQty;
+                final double unitPrice = _parsePrice(
+                  existingItem["priceReduce"] ?? existingItem["priceUnit"],
+                );
+                existingItem["total"] =
+                    (unitPrice * (existingItem["qty"] as int)).toStringAsFixed(2);
+                cartItems[existingIndex] = existingItem;
+              } else {
+                int nextLineId = 1;
+                for (final item in cartItems) {
+                  final int lineId =
+                      int.tryParse(item["lineId"].toString()) ?? 0;
+                  if (lineId >= nextLineId) {
+                    nextLineId = lineId + 1;
+                  }
+                }
+                final double unitPrice = _parsePrice(
+                  product["priceReduce"] ?? product["priceUnit"],
+                );
+                cartItems.add({
+                  "lineId": nextLineId,
+                  "templateId": product["templateId"],
+                  "productId": product["productId"],
+                  "name": product["name"],
+                  "thumbNail": product["thumbNail"],
+                  "priceReduce": product["priceReduce"],
+                  "priceUnit": product["priceUnit"],
+                  "qty": addQty,
+                  "total": (unitPrice * addQty).toStringAsFixed(2),
+                  "discount": "0.00",
+                  "isEditable": true,
+                });
+              }
+            }
+            AppSharedPref().setGuestCartItems(cartItems);
+            int cartCount = 0;
+            for (final item in cartItems) {
+              cartCount += int.tryParse(item["qty"].toString()) ?? 0;
+            }
+            AppSharedPref().setGuestCartCount(cartCount);
+
+            return handler.resolve(
+              Response(
+                requestOptions: options,
+                data: {
+                  "success": true,
+                  "responseCode": 200,
+                  "message": "Added to cart",
+                  "cartCount": cartCount,
+                },
+                statusCode: 200,
+              ),
+            );
+          }
+          if (isPlaceholderHost &&
+              options.path.contains('mobikul/mycart/setToEmpty')) {
+            AppSharedPref().setGuestCartItems([]);
+            AppSharedPref().setGuestCartCount(0);
+            return handler.resolve(
+              Response(
+                requestOptions: options,
+                data: {
+                  "success": true,
+                  "responseCode": 200,
+                  "message": "Cart emptied",
+                  "cartCount": 0,
+                },
+                statusCode: 200,
+              ),
+            );
+          }
+          if (isPlaceholderHost &&
+              options.path.contains('mobikul/mycart/') &&
+              options.method.toUpperCase() == 'DELETE' &&
+              !options.path.contains('setToEmpty')) {
+            final String lineIdRaw = options.path.split('/').last;
+            final int lineId = int.tryParse(lineIdRaw) ?? 0;
+            final List<Map<String, dynamic>> cartItems =
+                AppSharedPref().getGuestCartItems();
+            cartItems.removeWhere(
+              (item) => (int.tryParse(item["lineId"].toString()) ?? 0) == lineId,
+            );
+            AppSharedPref().setGuestCartItems(cartItems);
+            int cartCount = 0;
+            for (final item in cartItems) {
+              cartCount += int.tryParse(item["qty"].toString()) ?? 0;
+            }
+            AppSharedPref().setGuestCartCount(cartCount);
+            return handler.resolve(
+              Response(
+                requestOptions: options,
+                data: {
+                  "success": true,
+                  "responseCode": 200,
+                  "message": "Removed from cart",
+                  "cartCount": cartCount,
+                },
+                statusCode: 200,
+              ),
+            );
+          }
+          if (isPlaceholderHost &&
+              options.path.contains('mobikul/mycart/') &&
+              options.method.toUpperCase() == 'PUT') {
+            final String lineIdRaw = options.path.split('/').last;
+            final int lineId = int.tryParse(lineIdRaw) ?? 0;
+            Map<String, dynamic> payload = {};
+            if (options.data is String) {
+              payload = json.decode(options.data as String);
+            } else if (options.data is Map) {
+              payload = Map<String, dynamic>.from(options.data as Map);
+            }
+            final int setQty =
+                int.tryParse(payload["set_qty"].toString()) ?? 1;
+            final List<Map<String, dynamic>> cartItems =
+                AppSharedPref().getGuestCartItems();
+            for (int i = 0; i < cartItems.length; i++) {
+              final Map<String, dynamic> item = cartItems[i];
+              final int itemLineId =
+                  int.tryParse(item["lineId"].toString()) ?? 0;
+              if (itemLineId == lineId) {
+                if (setQty <= 0) {
+                  cartItems.removeAt(i);
+                } else {
+                  item["qty"] = setQty;
+                  final double unitPrice = _parsePrice(
+                    item["priceReduce"] ?? item["priceUnit"],
+                  );
+                  item["total"] =
+                      (unitPrice * setQty).toStringAsFixed(2);
+                  cartItems[i] = item;
+                }
+                break;
+              }
+            }
+            AppSharedPref().setGuestCartItems(cartItems);
+            int cartCount = 0;
+            for (final item in cartItems) {
+              cartCount += int.tryParse(item["qty"].toString()) ?? 0;
+            }
+            AppSharedPref().setGuestCartCount(cartCount);
+            return handler.resolve(
+              Response(
+                requestOptions: options,
+                data: {
+                  "success": true,
+                  "responseCode": 200,
+                  "message": "Cart updated",
+                  "cartCount": cartCount,
+                },
+                statusCode: 200,
+              ),
+            );
+          }
+          if (isPlaceholderHost &&
+              options.path.contains('mobikul/mycart/') &&
+              options.method.toUpperCase() == 'POST') {
+            final List<Map<String, dynamic>> cartItems =
+                AppSharedPref().getGuestCartItems();
+            double subtotalValue = 0.0;
+            int cartCount = 0;
+            for (final item in cartItems) {
+              final int qty = int.tryParse(item["qty"].toString()) ?? 0;
+              cartCount += qty;
+              final double unitPrice =
+                  _parsePrice(item["priceReduce"] ?? item["priceUnit"]);
+              subtotalValue += unitPrice * qty;
+            }
+            AppSharedPref().setGuestCartCount(cartCount);
+            final String subtotalText = subtotalValue.toStringAsFixed(2);
+            final mockData = {
+              "success": true,
+              "responseCode": 200,
+              "message": "Cart loaded",
+              "cartCount": cartCount,
+              "wishlistCount": 0,
+              "is_email_verified": true,
+              "name": "My Cart",
+              "subtotal": {"title": "Subtotal", "value": subtotalText},
+              "tax": {"title": "Tax", "value": "0.00"},
+              "grandtotal": {"title": "Total", "value": subtotalText},
+              "items": cartItems,
+              "accessoriesProducts": [],
+            };
+
+            return handler.resolve(
+              Response(
+                requestOptions: options,
+                data: mockData,
+                statusCode: 200,
+              ),
+            );
+          }
+          if (isPlaceholderHost &&
+              options.path.contains('mobikul/my/wishlists')) {
+            final List<Map<String, dynamic>> wishlistItems =
+                AppSharedPref().getGuestWishlistItems();
+            return handler.resolve(
+              Response(
+                requestOptions: options,
+                data: {
+                  "success": true,
+                  "responseCode": 200,
+                  "message": "Wishlist loaded",
+                  "wishlistCount": wishlistItems.length,
+                  "wishLists": wishlistItems,
+                },
+                statusCode: 200,
+              ),
+            );
+          }
+          if (isPlaceholderHost && options.path.contains('my/addToWishlist')) {
+            Map<String, dynamic> payload = {};
+            if (options.data is String) {
+              payload = json.decode(options.data as String);
+            } else if (options.data is Map) {
+              payload = Map<String, dynamic>.from(options.data as Map);
+            }
+            final int templateId =
+                int.tryParse(payload["productId"].toString()) ?? 0;
+            final String productName = payload["productName"]?.toString() ?? "";
+            final List<Map<String, dynamic>> wishlistItems =
+                AppSharedPref().getGuestWishlistItems();
+            final Map<String, dynamic> product = _demoProducts.firstWhere(
+              (item) => item["templateId"] == templateId,
+              orElse: () => {},
+            );
+            if (product.isNotEmpty) {
+              final bool exists = wishlistItems.any(
+                (item) => item["templateId"] == templateId,
+              );
+              if (!exists) {
+                int nextId = 1;
+                for (final item in wishlistItems) {
+                  final int id =
+                      int.tryParse(item["id"].toString()) ?? 0;
+                  if (id >= nextId) {
+                    nextId = id + 1;
+                  }
+                }
+                wishlistItems.add({
+                  "id": nextId,
+                  "name": productName.isNotEmpty
+                      ? productName
+                      : product["name"],
+                  "thumbNail": product["thumbNail"],
+                  "priceReduce": product["priceReduce"],
+                  "priceUnit": product["priceUnit"],
+                  "productId": product["templateId"],
+                  "templateId": product["templateId"],
+                });
+              }
+            }
+            AppSharedPref().setGuestWishlistItems(wishlistItems);
+            return handler.resolve(
+              Response(
+                requestOptions: options,
+                data: {
+                  "success": true,
+                  "responseCode": 200,
+                  "message": "Added to wishlist",
+                  "wishlistCount": wishlistItems.length,
+                },
+                statusCode: 200,
+              ),
+            );
+          }
+          if (isPlaceholderHost &&
+              options.path.contains('my/removeFromWishlist/')) {
+            final String productIdRaw = options.path.split('/').last;
+            final int templateId = int.tryParse(productIdRaw) ?? 0;
+            final List<Map<String, dynamic>> wishlistItems =
+                AppSharedPref().getGuestWishlistItems();
+            wishlistItems.removeWhere(
+              (item) => (int.tryParse(item["templateId"].toString()) ?? 0) == templateId,
+            );
+            AppSharedPref().setGuestWishlistItems(wishlistItems);
+            return handler.resolve(
+              Response(
+                requestOptions: options,
+                data: {
+                  "success": true,
+                  "responseCode": 200,
+                  "message": "Removed from wishlist",
+                  "wishlistCount": wishlistItems.length,
+                },
                 statusCode: 200,
               ),
             );

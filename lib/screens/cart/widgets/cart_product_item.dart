@@ -16,8 +16,6 @@
 
  */
 
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_project_structure/constants/app_constants.dart';
 import 'package:flutter_project_structure/constants/app_string_constant.dart';
@@ -25,18 +23,15 @@ import 'package:flutter_project_structure/constants/arguments_map.dart';
 import 'package:flutter_project_structure/constants/route_constant.dart';
 import 'package:flutter_project_structure/customWidgtes/dialog_helper.dart';
 import 'package:flutter_project_structure/helper/app_localizations.dart';
-import 'package:flutter_project_structure/helper/firebase_analytics.dart';
 import 'package:flutter_project_structure/helper/image_view.dart';
 import 'package:flutter_project_structure/models/CartViewModel.dart';
 import 'package:flutter_project_structure/screens/cart/bloc/cart_screen_bloc.dart';
 import 'package:flutter_project_structure/screens/cart/bloc/cart_screen_event.dart';
 import 'package:flutter_project_structure/screens/cart/bloc/cart_screen_state.dart';
-import 'package:flutter_project_structure/screens/cart/cart_screen.dart';
-import 'package:flutter_project_structure/screens/cart/widgets/quantity_drop_down.dart';
 
 import '../../../helper/app_shared_pref.dart';
 
-class CartProductItem extends StatelessWidget {
+class CartProductItem extends StatefulWidget {
   const CartProductItem(this.product, this.localizations, this.bloc,
       {super.key});
 
@@ -45,17 +40,114 @@ class CartProductItem extends StatelessWidget {
   final CartScreenBloc? bloc;
 
   @override
+  State<CartProductItem> createState() => _CartProductItemState();
+}
+
+class _CartProductItemState extends State<CartProductItem> {
+  late int _quantity;
+
+  @override
+  void initState() {
+    super.initState();
+    _quantity = widget.product?.qty?.toInt() ?? 1;
+  }
+
+  @override
+  void didUpdateWidget(covariant CartProductItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final int newQty = widget.product?.qty?.toInt() ?? 1;
+    if (newQty != _quantity) {
+      _quantity = newQty;
+    }
+  }
+
+  void _updateQuantity(int nextQty) {
+    if (nextQty < 1) {
+      return;
+    }
+    setState(() {
+      _quantity = nextQty;
+    });
+    widget.bloc?.add(
+      SetCartItemQuantityEvent(widget.product?.lineId ?? 0, nextQty),
+    );
+    widget.bloc?.emit(CartScreenInitial());
+  }
+
+  Widget _quantityControl(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: AppSizes.linePadding),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(AppSizes.buttonRadius),
+        border: Border.all(color: Theme.of(context).dividerColor),
+        color: Theme.of(context).cardColor,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _quantityButton(
+            context,
+            icon: Icons.remove,
+            onTap: () => _updateQuantity(_quantity - 1),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSizes.genericPadding,
+              vertical: AppSizes.linePadding,
+            ),
+            decoration: BoxDecoration(
+              border: Border.symmetric(
+                vertical: BorderSide(color: Theme.of(context).dividerColor),
+              ),
+            ),
+            child: Text(
+              _quantity.toString(),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+          _quantityButton(
+            context,
+            icon: Icons.add,
+            onTap: () => _updateQuantity(_quantity + 1),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _quantityButton(
+    BuildContext context, {
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSizes.linePadding,
+          vertical: 2,
+        ),
+        child: Icon(
+          icon,
+          size: 18,
+          color: Theme.of(context).iconTheme.color,
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSizes.mediumPadding),
       child: InkWell(
         onTap: () {
           Navigator.pushNamed(context, productPage,
-                  arguments: getProductDataMap(product?.name ?? '',
-                      product?.templateId.toString() ?? ''))
+                  arguments: getProductDataMap(widget.product?.name ?? '',
+                      widget.product?.templateId.toString() ?? ''))
               .then((value) {
-            bloc?.add(const CartScreenDataFetchEvent());
-            bloc?.emit(CartScreenInitial());
+            widget.bloc?.add(const CartScreenDataFetchEvent());
+            widget.bloc?.emit(CartScreenInitial());
           });
         },
         child: Container(
@@ -77,26 +169,14 @@ class CartProductItem extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           ImageView(
-                            url: product?.thumbNail,
+                            url: widget.product?.thumbNail,
                             height: AppSizes.height / 7,
                             width: AppSizes.width / 4,
                           ),
-                          (product?.isEditable ?? false)
-                              ? SizedBox(
-                                  height: AppSizes.buttonRadius,
-                                  child: QuantityDropDown((value) async {
-                                    if (int.tryParse(value)! >
-                                        (product?.qty?.toInt() ?? 1)) {}
-                                    bloc?.add(SetCartItemQuantityEvent(
-                                        product?.lineId ?? 0,
-                                        int.tryParse(value) ?? 1));
-                                    bloc?.emit(CartScreenInitial());
-                                  }, product?.qty?.toInt()
-                                      // product?.
-                                      ),
-                                )
+                          (widget.product?.isEditable ?? false)
+                              ? _quantityControl(context)
                               : Text(
-                                  "${localizations?.translate(AppStringConstant.qty)} ${product?.qty?.toInt().toString() ?? " "}",
+                                  "${widget.localizations?.translate(AppStringConstant.qty)} ${widget.product?.qty?.toInt().toString() ?? " "}",
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleSmall
@@ -113,20 +193,20 @@ class CartProductItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          Text(product?.name ?? "",
+                          Text(widget.product?.name ?? "",
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge
                                   ?.copyWith(fontWeight: FontWeight.normal)),
                           const SizedBox(height: AppSizes.imageRadius),
-                          Text(product?.priceUnit ?? "0.00",
+                          Text(widget.product?.priceUnit ?? "0.00",
                               style: Theme.of(context).textTheme.titleLarge),
                           const SizedBox(height: AppSizes.imageRadius),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Text(
-                                (localizations?.translate(
+                                (widget.localizations?.translate(
                                             AppStringConstant.subtotal) ??
                                         "") +
                                     ": ",
@@ -136,7 +216,7 @@ class CartProductItem extends StatelessWidget {
                                     ?.copyWith(fontSize: 14),
                               ),
                               Expanded(
-                                child: Text((product?.total ?? "0.00"),
+                                child: Text((widget.product?.total ?? "0.00"),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                     style:
@@ -148,30 +228,30 @@ class CartProductItem extends StatelessWidget {
                       ),
                     ),
                     // Edit button
-                    Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.gray)),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, productPage,
-                                  arguments: getProductDataMap(
-                                      product?.name ?? '',
-                                      product?.templateId.toString() ?? ''))
-                              .then((value) {
-                            bloc?.add(const CartScreenDataFetchEvent());
-                            bloc?.emit(CartScreenInitial());
-                          });
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.all(AppSizes.imageRadius),
-                          child: Icon(
-                            Icons.edit,
-                            size: AppSizes.iconButtonBorderRadius,
-                          ),
-                        ),
-                      ),
-                    )
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //       shape: BoxShape.circle,
+                    //       border: Border.all(color: AppColors.gray)),
+                    //   child: InkWell(
+                    //     onTap: () {
+                    //       Navigator.pushNamed(context, productPage,
+                    //               arguments: getProductDataMap(
+                    //                   product?.name ?? '',
+                    //                   product?.templateId.toString() ?? ''))
+                    //           .then((value) {
+                    //         bloc?.add(const CartScreenDataFetchEvent());
+                    //         bloc?.emit(CartScreenInitial());
+                    //       });
+                    //     },
+                    //     child: const Padding(
+                    //       padding: EdgeInsets.all(AppSizes.imageRadius),
+                    //       child: Icon(
+                    //         Icons.edit,
+                    //         size: AppSizes.iconButtonBorderRadius,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
               ),
@@ -183,7 +263,7 @@ class CartProductItem extends StatelessWidget {
                   children: <Widget>[
                     _iconButton(
                         Icons.favorite_border,
-                        localizations
+                        widget.localizations
                                 ?.translate(AppStringConstant.moveToWishlist) ??
                             "", () {
                       if (AppSharedPref().getIfLogin() != null &&
@@ -191,10 +271,11 @@ class CartProductItem extends StatelessWidget {
                         DialogHelper.confirmationDialog(
                             AppStringConstant.moveToWishlistText,
                             context,
-                            localizations, onConfirm: () {
-                          bloc?.add(CartToWishlistEvent(
-                              product?.name ?? "", product?.lineId ?? 0));
-                          bloc?.emit(CartScreenInitial());
+                            widget.localizations, onConfirm: () {
+                          widget.bloc?.add(CartToWishlistEvent(
+                              widget.product?.name ?? "",
+                              widget.product?.lineId ?? 0));
+                          widget.bloc?.emit(CartScreenInitial());
                         });
                       } else {
                         DialogHelper.confirmationDialog(
@@ -208,15 +289,16 @@ class CartProductItem extends StatelessWidget {
                     }, context),
                     _iconButton(
                         Icons.delete_forever,
-                        localizations
+                        widget.localizations
                                 ?.translate(AppStringConstant.removeItem) ??
                             "", () {
                       DialogHelper.confirmationDialog(
                           AppStringConstant.deleteItemFromCart,
                           context,
-                          localizations, onConfirm: () async {
-                        bloc?.add(RemoveCartItem(product?.lineId ?? 0));
-                        bloc?.emit(CartScreenInitial());
+                          widget.localizations, onConfirm: () async {
+                        widget.bloc
+                            ?.add(RemoveCartItem(widget.product?.lineId ?? 0));
+                        widget.bloc?.emit(CartScreenInitial());
                         // AnalyticsEventsFirebase().removeFromCart(
                         //   product?.lineId.toString() ?? "0",
                         //   product?.name ?? "0",

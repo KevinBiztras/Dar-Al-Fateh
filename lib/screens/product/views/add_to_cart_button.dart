@@ -77,18 +77,11 @@ class AddToCartButtonView extends StatelessWidget {
                   productPageBloc?.emit(ProductScreenInitial());
                   // AnalyticsEventsFirebase().addCartEvent(productId.toString(), productName, counter);
                 } else {
-                  DialogHelper.confirmationDialog(
-                    "${_localizations?.translate(AppStringConstant.signInToContinue)}",
-                    context,
-                    _localizations,
-                    onConfirm: () async {
-                      Navigator.pushNamed(
-                        context,
-                        loginSignup,
-                        arguments: false,
-                      );
-                    },
+                  AppSharedPref().setGuestCheckout(true);
+                  productPageBloc?.add(
+                    AddtoCartEvent(productId.toString(), counter),
                   );
+                  productPageBloc?.emit(ProductScreenInitial());
                 }
               },
               _localizations?.translate(AppStringConstant.addToCart) ?? '',

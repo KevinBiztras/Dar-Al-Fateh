@@ -21,6 +21,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_project_structure/constants/app_constants.dart';
 import 'package:flutter_project_structure/local_database/hive_constants.dart';
 import 'package:flutter_project_structure/local_database/hive_service.dart';
 import 'package:flutter_project_structure/local_database/prefetch_helper.dart';
@@ -56,7 +57,7 @@ class CategoryScreenRepositoryImp implements CatalogScreenRepository{
     final HiveService hiveService = HiveService();
     String categoryBoxName = HiveConstants.getCategoryPageBoxName(body);
     bool isCacheAvailable = await hiveService.isExists(boxName: categoryBoxName);
-    if (isCacheAvailable) {
+    if (!ApiConstant.baseUrl.contains('example.com') && isCacheAvailable) {
       model = await hiveService.getCategoryPageBox(categoryBoxName);
       callCategoryApiAndUpdateHiveDB(hiveService, categoryBoxName, body);
       return model!;
@@ -85,7 +86,7 @@ class CategoryScreenRepositoryImp implements CatalogScreenRepository{
     String productSliderBoxName = HiveConstants.getProductSliderBoxName(body, url);
     debugPrint("productSliderBoxName $productSliderBoxName");
     bool isCacheAvailable = await hiveService.isExists(boxName: productSliderBoxName);
-    if (isCacheAvailable) {
+    if (!ApiConstant.baseUrl.contains('example.com') && isCacheAvailable) {
       model = await hiveService.getProductSliderBox(productSliderBoxName);
       callProductSliderApiAndUpdateHiveDB(hiveService, productSliderBoxName, body, url);
       return model!;
@@ -113,7 +114,7 @@ class CategoryScreenRepositoryImp implements CatalogScreenRepository{
     final HiveService hiveService = HiveService();
     String categoryBoxName = HiveConstants.getCategoryPageBoxName(body);
     bool isCacheAvailable = await hiveService.isExists(boxName: categoryBoxName);
-    if (isCacheAvailable) {
+    if (!ApiConstant.baseUrl.contains('example.com') && isCacheAvailable) {
       model = await hiveService.getCategoryPageBox(categoryBoxName);
       callCategoryApiAndUpdateHiveDB(hiveService, categoryBoxName, body);
       return model!;

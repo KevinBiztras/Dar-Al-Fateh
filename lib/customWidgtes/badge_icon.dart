@@ -102,12 +102,14 @@ class _BadgeIconState extends State<BadgeIcon> {
          });
        }
      });
-   }else if(AppSharedPref().getGuestCartCount() != null){
+   } else if (AppSharedPref().getGuestCartCount() != null) {
      Future.delayed(Duration.zero).then((value) {
        try {
-         if(mounted){
+         if (mounted) {
+           final guestItems = AppSharedPref().getGuestCartItems();
            setState(() {
-             badgeCount = AppSharedPref().getGuestCartCount() ??  0;
+             badgeCount =
+                 guestItems.isNotEmpty ? guestItems.length : (AppSharedPref().getGuestCartCount() ?? 0);
            });
          }
        } catch (e) {
