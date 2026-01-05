@@ -37,11 +37,12 @@ class RemoveCartItem extends CartScreenEvent{
   List<Object> get props => [];
 }
 
-class CartToWishlistEvent extends CartScreenEvent{
+class CartToWishlistEvent extends CartScreenEvent {
   final String productName;
   final int lineId;
+  final int? templateId;
 
-  const CartToWishlistEvent(this.productName,this.lineId);
+  const CartToWishlistEvent(this.productName, this.lineId, {this.templateId});
 }
 
 class SetCartEmpty extends CartScreenEvent{

@@ -738,177 +738,167 @@ class _ProductScreenState extends State<ProductScreen> {
                           child: Column(
                             children: [
                               Stack(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 26),
-                                    child: ProductImages(
-                                      productPageData?.images ?? [],
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 26),
+                                      child: ProductImages(
+                                        productPageData?.images ?? [],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              ProductPageBasicDetailsView(
-                                addedToWishlist!,
-                                productPageBloc,
-                                product: productPageData,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Text('Description',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),),
-                        ),
-
-                        SizedBox(height: AppSizes.normalPadding),
-                        if ((productPageData?.variants ?? []).isNotEmpty)
-                          ProductVariants(productPageData, productPageBloc),
-                        SizedBox(height: AppSizes.normalPadding),
-
-                        Visibility(
-                          visible:
-                              productPageData?.description != "" &&
-                              productPageData?.description != null,
-                          child: ProductDetailsView(
-                            productPageData?.description,
-                          ),
-                        ),
-
-                        Visibility(
-                          visible:
-                              (productPageData?.attributes != null &&
-                              (productPageData?.attributes?.isNotEmpty ??
-                                  false)),
-                          child: Container(
-                            color: Theme.of(context).cardColor,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: AppSizes.mediumPadding),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0,
-                                  ),
-                                  child: Text(
-                                    _localizations?.translate(
-                                          AppStringConstant.specifications,
-                                        ) ??
-                                        '',
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.titleSmall,
-                                    textAlign: TextAlign.start,
-                                  ),
+                                  ],
                                 ),
-                                SizedBox(height: AppSizes.normalPadding),
-                                ListView.separated(
-                                  padding: EdgeInsets.zero,
-                                  shrinkWrap: true,
-                                  itemCount:
-                                      productPageData?.attributes?.length ?? 0,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    var attribute =
-                                        productPageData?.attributes?[index];
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0,
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            attribute?.name ?? "",
-                                            style: Theme.of(
-                                              context,
-                                            ).textTheme.bodyMedium,
-                                          ),
-                                          SizedBox(
-                                            width: AppSizes.mediumPadding,
-                                          ),
-                                          Text(
-                                            attribute?.values
-                                                    ?.map((v) => v.name)
-                                                    .join(", ") ??
-                                                "",
-                                            style: Theme.of(
-                                              context,
-                                            ).textTheme.bodySmall,
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  separatorBuilder:
-                                      (BuildContext context, int index) {
-                                        return SizedBox(height: 4);
-                                      },
+                                ProductPageBasicDetailsView(
+                                  addedToWishlist!,
+                                  productPageBloc,
+                                  product: productPageData,
                                 ),
-                                SizedBox(height: AppSizes.normalPadding),
-                                Divider(thickness: 1),
                               ],
                             ),
                           ),
-                        ),
-
-                        if ((AppSharedPref().getSplashData()?.addons?.review ??
-                                false) &&
-                            (productPageData?.totalReview ?? 0) > 0)
-                          reviewTile(),
-                        if (AppSharedPref().getSplashData()?.isCrossSelling ??
-                            false)
-                          AlternateProductsList(
-                            productPageData?.alternativeProducts,
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text('Description', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
                           ),
-
-                        // Add extra padding at bottom to account for fixed bottom section
-                        SizedBox(height: 180),
+                          SizedBox(height: AppSizes.normalPadding),
+                          if ((productPageData?.variants ?? []).isNotEmpty)
+                            ProductVariants(productPageData, productPageBloc),
+                          SizedBox(height: AppSizes.normalPadding),
+                          Visibility(
+                            visible:
+                                productPageData?.description != "" &&
+                                productPageData?.description != null,
+                            child: ProductDetailsView(
+                              productPageData?.description,
+                            ),
+                          ),
+                          Visibility(
+                            visible:
+                                (productPageData?.attributes != null &&
+                                (productPageData?.attributes?.isNotEmpty ??
+                                    false)),
+                            child: Container(
+                              color: Theme.of(context).cardColor,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: AppSizes.mediumPadding),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0,
+                                    ),
+                                    child: Text(
+                                      _localizations?.translate(
+                                            AppStringConstant.specifications,
+                                          ) ??
+                                          '',
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleSmall,
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                  SizedBox(height: AppSizes.normalPadding),
+                                  ListView.separated(
+                                    padding: EdgeInsets.zero,
+                                    shrinkWrap: true,
+                                    itemCount:
+                                        productPageData?.attributes?.length ?? 0,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemBuilder: (context, index) {
+                                      var attribute =
+                                          productPageData?.attributes?[index];
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0,
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              attribute?.name ?? "",
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.bodyMedium,
+                                            ),
+                                            SizedBox(
+                                              width: AppSizes.mediumPadding,
+                                            ),
+                                            Text(
+                                              attribute?.values
+                                                      ?.map((v) => v.name)
+                                                      .join(", ") ??
+                                                  "",
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.bodySmall,
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    separatorBuilder:
+                                        (BuildContext context, int index) {
+                                          return SizedBox(height: 4);
+                                        },
+                                  ),
+                                  SizedBox(height: AppSizes.normalPadding),
+                                  Divider(thickness: 1),
+                                ],
+                              ),
+                            ),
+                          ),
+                          if ((AppSharedPref().getSplashData()?.addons?.review ??
+                                  false) &&
+                              (productPageData?.totalReview ?? 0) > 0)
+                            reviewTile(),
+                          if (AppSharedPref().getSplashData()?.isCrossSelling ??
+                              false)
+                            AlternateProductsList(
+                              productPageData?.alternativeProducts,
+                            ),
+                          SizedBox(height: 180),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: Offset(0, -2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        QuantityView(bloc: productPageBloc, counter: counter),
+                        AddToCartButtonView(
+                          productPageBloc,
+                          ApiConstant.baseUrl.contains('example.com')
+                              ? (int.tryParse(
+                                      widget.arguments[productIdKey]?.toString() ??
+                                          '') ??
+                                  productPageData?.templateId ??
+                                  productPageData?.productId ??
+                                  0)
+                              : (productPageData?.productId ?? 0),
+                          productPageData?.name ?? '',
+                          counter!,
+                        ),
                       ],
                     ),
                   ),
-                ),
-
-                // Fixed bottom section with Quantity and Add to Cart
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: Offset(0, -2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Quantity View
-                      QuantityView(bloc: productPageBloc, counter: counter),
-
-                      // Add to Cart Buttons
-                      AddToCartButtonView(
-                        productPageBloc,
-                        ApiConstant.baseUrl.contains('example.com')
-                            ? (int.tryParse(
-                                    widget.arguments[productIdKey]?.toString() ??
-                                        '') ??
-                                productPageData?.templateId ??
-                                productPageData?.productId ??
-                                0)
-                            : (productPageData?.productId ?? 0),
-                        productPageData?.name ?? '',
-                        counter!,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Visibility(visible: isLoading, child: Loader()),
-        ],
-      ),
-    );
+            Visibility(visible: isLoading, child: Loader()),
+          ],
+        ),
+      );
+    
   }
 
   Widget reviewTile() {
@@ -952,7 +942,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
   Future startArActivity() async {
     if (Platform.isIOS) {
-      Helper().downloadPersonalData(context, productPageData?.arIos ?? "");
+      Helper().downloadPersonalData(context, productPageData?.arIos ?? "");   
     }
     try {
       var data = await methodChannel.invokeMethod("showAr", {

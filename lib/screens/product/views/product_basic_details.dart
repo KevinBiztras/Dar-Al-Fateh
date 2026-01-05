@@ -76,6 +76,18 @@ class ProductPageBasicDetailsViewState
     extends State<ProductPageBasicDetailsView> {
   AppLocalizations? _localizations;
 
+  bool _isInGuestWishlist() {
+    final int? templateId =
+        widget.product?.templateId ?? widget.product?.productId;
+    if (templateId == null) {
+      return false;
+    }
+    return AppSharedPref().getGuestWishlistItems().any(
+          (item) =>
+              (int.tryParse(item["templateId"].toString()) ?? 0) == templateId,
+        );
+  }
+
   @override
   void didChangeDependencies() {
     _localizations = AppLocalizations.of(context);
@@ -230,26 +242,39 @@ class ProductPageBasicDetailsViewState
                     if (!isLoggedIn) {
                       AppSharedPref().setGuestCheckout(true);
                     }
-                    !widget.addedToWishlist
-                        ? widget.productPageBloc?.add(AddToWishlistEvent(
-                            (widget.product?.templateId ??
-                                    widget.product?.productId ??
-                                    0)
-                                .toString(),
-                            widget.product?.name ?? ""))
-                        : widget.productPageBloc?.add(RemoveFromWishlistEvent(
-                            (widget.product?.templateId ??
-                                    widget.product?.productId ??
-                                    0)
-                                .toString()));
+                    final bool isWishlisted = widget.addedToWishlist ||
+                        widget.product?.addedToWishlist == true ||
+                        (!isLoggedIn && _isInGuestWishlist());
+                    final String productId = (widget.product?.templateId ??
+                            widget.product?.productId ??
+                            0)
+                        .toString();
+                    if (!isWishlisted) {
+                      widget.productPageBloc?.add(
+                        AddToWishlistEvent(
+                          productId,
+                          widget.product?.name ?? "",
+                        ),
+                      );
+                    } else {
+                      widget.productPageBloc
+                          ?.add(RemoveFromWishlistEvent(productId));
+                    }
+                    setState(() {
+                      widget.addedToWishlist = !isWishlisted;
+                      if (widget.product != null) {
+                        widget.product!.addedToWishlist = !isWishlisted;
+                      }
+                    });
                     widget.productPageBloc?.emit(ProductScreenInitial());
-                    },
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
                         widget.addedToWishlist ||
-                                widget.product?.addedToWishlist == true
+                                widget.product?.addedToWishlist == true ||
+                                _isInGuestWishlist()
                             ? Icons.favorite
                             : Icons.favorite_border_outlined,
                         color: !widget.addedToWishlist

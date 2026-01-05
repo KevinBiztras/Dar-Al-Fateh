@@ -75,6 +75,12 @@ class AddToCartButtonView extends StatelessWidget {
                     AddtoCartEvent(productId.toString(), counter),
                   );
                   productPageBloc?.emit(ProductScreenInitial());
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Added to cart'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
                   // AnalyticsEventsFirebase().addCartEvent(productId.toString(), productName, counter);
                 } else {
                   AppSharedPref().setGuestCheckout(true);
@@ -82,6 +88,12 @@ class AddToCartButtonView extends StatelessWidget {
                     AddtoCartEvent(productId.toString(), counter),
                   );
                   productPageBloc?.emit(ProductScreenInitial());
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Added to cart'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
                 }
               },
               _localizations?.translate(AppStringConstant.addToCart) ?? '',

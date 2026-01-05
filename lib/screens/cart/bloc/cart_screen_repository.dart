@@ -27,7 +27,8 @@ import 'package:flutter_project_structure/networkManager/api_client.dart';
 abstract class CartScreenRepository{
   Future<CartViewModel> getCartData();
   Future<BaseModel> removeCartItem(int lineId);
-  Future<BaseModel> cartToWishlist(String productName, int lineId);
+  Future<BaseModel> cartToWishlist(String productName, int lineId,
+      {int? templateId});
   Future<BaseModel> setCartEmpty();
   Future<BaseModel> setCartItemQty(int lineId, int qty);
   Future<BaseModel> addCartItem(int productId);
@@ -50,11 +51,15 @@ class CartScreenRepositoryImp extends CartScreenRepository{
   }
 
   @override
-  Future<BaseModel> cartToWishlist(String productName, int lineId) async{
+  Future<BaseModel> cartToWishlist(String productName, int lineId,
+      {int? templateId}) async {
     BaseModel? model;
     Map<String,dynamic> data = {};
     data["productName"] = productName;
     data["line_id"] = lineId;
+    if (templateId != null) {
+      data["productId"] = templateId;
+    }
 
     String body = json.encode(data);
     model = await ApiClient().cartToWishlist(body, "text/plain");

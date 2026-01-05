@@ -62,9 +62,12 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState>{
         break;
       case CartToWishlistEvent:
         try {
-          var model = await repository?.cartToWishlist((event as CartToWishlistEvent).productName, (event).lineId);
+          var model = await repository?.cartToWishlist(
+              (event as CartToWishlistEvent).productName,
+              event.lineId,
+              templateId: event.templateId);
           if (model != null) {
-            emit( CartToWishlistState(model));
+            emit(CartToWishlistState(model));
           } else {
             emit(CartScreenError(''));
           }

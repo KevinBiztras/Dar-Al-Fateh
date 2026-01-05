@@ -32,8 +32,12 @@ import 'package:flutter_project_structure/screens/cart/bloc/cart_screen_state.da
 import '../../../helper/app_shared_pref.dart';
 
 class CartProductItem extends StatefulWidget {
-  const CartProductItem(this.product, this.localizations, this.bloc,
-      {super.key});
+  const CartProductItem(
+    this.product,
+    this.localizations,
+    this.bloc, {
+    super.key,
+  });
 
   final Items? product;
   final AppLocalizations? localizations;
@@ -102,7 +106,8 @@ class _CartProductItemState extends State<CartProductItem> {
             ),
             child: Text(
               _quantity.toString(),
-              style: Theme.of(context).textTheme.titleMedium,
+              style: Theme.of(context).textTheme.titleLarge
+              ,
             ),
           ),
           _quantityButton(
@@ -127,11 +132,7 @@ class _CartProductItemState extends State<CartProductItem> {
           horizontal: AppSizes.linePadding,
           vertical: 2,
         ),
-        child: Icon(
-          icon,
-          size: 18,
-          color: Theme.of(context).iconTheme.color,
-        ),
+        child: Icon(icon, size: 18, color: Theme.of(context).iconTheme.color),
       ),
     );
   }
@@ -142,10 +143,14 @@ class _CartProductItemState extends State<CartProductItem> {
       padding: const EdgeInsets.only(bottom: AppSizes.mediumPadding),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, productPage,
-                  arguments: getProductDataMap(widget.product?.name ?? '',
-                      widget.product?.templateId.toString() ?? ''))
-              .then((value) {
+          Navigator.pushNamed(
+            context,
+            productPage,
+            arguments: getProductDataMap(
+              widget.product?.name ?? '',
+              widget.product?.templateId.toString() ?? '',
+            ),
+          ).then((value) {
             widget.bloc?.add(const CartScreenDataFetchEvent());
             widget.bloc?.emit(CartScreenInitial());
           });
@@ -156,33 +161,34 @@ class _CartProductItemState extends State<CartProductItem> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(
-                    right: AppSizes.mediumPadding,
-                    left: AppSizes.mediumPadding,
-                    top: AppSizes.imageRadius),
+                  right: AppSizes.mediumPadding,
+                  left: AppSizes.mediumPadding,
+                  top: AppSizes.imageRadius,
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     // Image and qty dropdown
                     Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          ImageView(
-                            url: widget.product?.thumbNail,
-                            height: AppSizes.height / 7,
-                            width: AppSizes.width / 4,
-                          ),
-                          (widget.product?.isEditable ?? false)
-                              ? _quantityControl(context)
-                              : Text(
-                                  "${widget.localizations?.translate(AppStringConstant.qty)} ${widget.product?.qty?.toInt().toString() ?? " "}",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall
-                                      ?.copyWith(fontSize: 14),
-                                ),
-                        ]),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ImageView(
+                          url: widget.product?.thumbNail,
+                          height: AppSizes.height / 7,
+                          width: AppSizes.width / 4,
+                        ),
+                        (widget.product?.isEditable ?? false)
+                            ? _quantityControl(context)
+                            : Text(
+                                "${widget.localizations?.translate(AppStringConstant.qty)} ${widget.product?.qty?.toInt().toString() ?? " "}",
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.titleSmall?.copyWith(fontSize: 14),
+                              ),
+                      ],
+                    ),
 
                     const SizedBox(width: AppSizes.mediumPadding),
 
@@ -193,37 +199,39 @@ class _CartProductItemState extends State<CartProductItem> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          Text(widget.product?.name ?? "",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.normal)),
+                          Text(
+                            widget.product?.name ?? "",
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(fontWeight: FontWeight.w500),
+                          ),
                           const SizedBox(height: AppSizes.imageRadius),
-                          Text(widget.product?.priceUnit ?? "0.00",
-                              style: Theme.of(context).textTheme.titleLarge),
+                          Text(
+                            widget.product?.priceUnit ?? "0.00",
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
                           const SizedBox(height: AppSizes.imageRadius),
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Text(
-                                (widget.localizations?.translate(
-                                            AppStringConstant.subtotal) ??
-                                        "") +
-                                    ": ",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(fontSize: 14),
+                                "${widget.localizations?.translate(
+                                          AppStringConstant.subtotal,
+                                        ) ??
+                                        ""}: ",
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.titleSmall?.copyWith(fontSize: 14),
                               ),
                               Expanded(
-                                child: Text((widget.product?.total ?? "0.00"),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style:
-                                        Theme.of(context).textTheme.titleLarge),
+                                child: Text(
+                                  (widget.product?.total ?? "0.00"),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
                               ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -262,49 +270,63 @@ class _CartProductItemState extends State<CartProductItem> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     _iconButton(
-                        Icons.favorite_border,
-                        widget.localizations
-                                ?.translate(AppStringConstant.moveToWishlist) ??
-                            "", () {
-                      if (AppSharedPref().getIfLogin() != null &&
-                          AppSharedPref().getIfLogin() == true) {
+                      // Icons.favorite_border,
+                      Icons.arrow_forward,
+                      widget.localizations?.translate(
+                            AppStringConstant.moveToWishlist,
+                          ) ??
+                          "",
+                      () {
+                        AppSharedPref().setGuestCheckout(true);
                         DialogHelper.confirmationDialog(
-                            AppStringConstant.moveToWishlistText,
-                            context,
-                            widget.localizations, onConfirm: () {
-                          widget.bloc?.add(CartToWishlistEvent(
-                              widget.product?.name ?? "",
-                              widget.product?.lineId ?? 0));
-                          widget.bloc?.emit(CartScreenInitial());
-                        });
-                      } else {
-                        DialogHelper.confirmationDialog(
-                            "${AppLocalizations.of(context)?.translate(AppStringConstant.signInToContinue)}",
-                            context,
-                            AppLocalizations.of(context), onConfirm: () async {
-                          Navigator.pushNamed(context, loginSignup,
-                              arguments: false);
-                        });
-                      }
-                    }, context),
+                          AppStringConstant.moveToWishlistText,
+                          context,
+                          widget.localizations,
+                          onConfirm: () {
+                            widget.bloc?.add(
+                              CartToWishlistEvent(
+                                widget.product?.name ?? "",
+                                widget.product?.lineId ?? 0,
+                                templateId: widget.product?.templateId,
+                              ),
+                            );
+                            widget.bloc?.emit(CartScreenInitial());
+                          },
+                        );
+                      },
+                      context,
+                      // buttonColor: Colors.blue.shade300,
+                      borderColor: Colors.blue,
+                      iconColor: Colors.blue.shade800,
+                    ),
                     _iconButton(
-                        Icons.delete_forever,
-                        widget.localizations
-                                ?.translate(AppStringConstant.removeItem) ??
-                            "", () {
-                      DialogHelper.confirmationDialog(
+                      Icons.delete_forever,
+                     
+                      widget.localizations?.translate(
+                            AppStringConstant.removeItem,
+                          ) ??
+                          "",
+                      () {
+                        DialogHelper.confirmationDialog(
                           AppStringConstant.deleteItemFromCart,
                           context,
-                          widget.localizations, onConfirm: () async {
-                        widget.bloc
-                            ?.add(RemoveCartItem(widget.product?.lineId ?? 0));
-                        widget.bloc?.emit(CartScreenInitial());
-                        // AnalyticsEventsFirebase().removeFromCart(
-                        //   product?.lineId.toString() ?? "0",
-                        //   product?.name ?? "0",
-                        // );
-                      });
-                    }, context),
+                          widget.localizations,
+                          onConfirm: () async {
+                            widget.bloc?.add(
+                              RemoveCartItem(widget.product?.lineId ?? 0),
+                            );
+                            widget.bloc?.emit(CartScreenInitial());
+                            // AnalyticsEventsFirebase().removeFromCart(
+                            //   product?.lineId.toString() ?? "0",
+                            //   product?.name ?? "0",
+                            // );
+                          },
+                        );
+                      },
+                      context,
+                      iconColor: Colors.red,
+                      // borderColor: Colors.red,
+                    ),
                   ],
                 ),
               ),
@@ -315,37 +337,50 @@ class _CartProductItemState extends State<CartProductItem> {
     );
   }
 
-  Widget _iconButton(IconData icon, String title, VoidCallback onTap,
-          BuildContext context) =>
-      SizedBox(
-        width: AppSizes.width / 2.2,
-        child: OutlinedButton(
-          onPressed: onTap,
-          style: OutlinedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-              side: BorderSide(
-                  color: Theme.of(context).colorScheme.onPrimary, width: 1.5)),
-          child: Padding(
-            padding: const EdgeInsets.all(AppSizes.imageRadius),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Icon(
-                  icon,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-                const SizedBox(width: AppSizes.linePadding),
-                Flexible(
-                    child: Text(title.toUpperCase(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10,
-                            color: Theme.of(context).colorScheme.onPrimary))),
-              ],
-            ),
-          ),
+  Widget _iconButton(
+    IconData icon,
+    String title,
+    VoidCallback onTap,
+    BuildContext context, {
+    Color? iconColor,
+    Color? buttonColor,
+    Color? borderColor,
+  }) => SizedBox(
+    width: AppSizes.width / 2.2,
+    child: OutlinedButton(
+      onPressed: onTap,
+      style: OutlinedButton.styleFrom(
+        backgroundColor:buttonColor?? Theme.of(context).colorScheme.secondaryContainer, // Button background color
+        side: BorderSide(
+          color: borderColor ?? Theme.of(context).colorScheme.onPrimary, // Border color
+          width: 1.5,
         ),
-      );
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSizes.imageRadius),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Icon(
+              icon,
+              color: iconColor ?? Theme.of(context).colorScheme.onPrimary,
+            ),
+            const SizedBox(width: AppSizes.linePadding),
+            Flexible(
+              child: Text(
+                title.toUpperCase(),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                  color: iconColor ?? Theme.of(context).colorScheme.onPrimary, // Text color
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

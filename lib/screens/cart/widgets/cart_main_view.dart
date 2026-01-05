@@ -86,6 +86,7 @@ class CartMainView extends StatelessWidget {
                 ),
               ),
             ),
+            // Listview of products in cart
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -271,7 +272,11 @@ class CartMainView extends StatelessWidget {
           title: localizations?.translate(AppStringConstant.continueShopping) ??
               "",
           onClick: () {
-            Navigator.pushNamed(context, navBar, arguments: 0);
+            Navigator.pushNamed(
+              context,
+              catalogPage,
+              arguments: getCatalogMap("", false, "Shop Vegitables", customerId: 0),
+            );
           },
         ),
 

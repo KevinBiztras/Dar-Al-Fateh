@@ -664,6 +664,96 @@ abstract class ApiClient {
               ),
             );
           }
+          if (isPlaceholderHost && options.path.contains('my/cartToWishlist')) {
+            Map<String, dynamic> payload = {};
+            if (options.data is String) {
+              payload = json.decode(options.data as String);
+            } else if (options.data is Map) {
+              payload = Map<String, dynamic>.from(options.data as Map);
+            }
+            final int lineId =
+                int.tryParse(payload["line_id"].toString()) ?? 0;
+            final int templateId =
+                int.tryParse(payload["productId"].toString()) ?? 0;
+            final String productName = payload["productName"]?.toString() ?? "";
+
+            final List<Map<String, dynamic>> cartItems =
+                AppSharedPref().getGuestCartItems();
+            Map<String, dynamic>? cartItem;
+            for (final item in cartItems) {
+              final int itemLineId =
+                  int.tryParse(item["lineId"].toString()) ?? 0;
+              if (itemLineId == lineId) {
+                cartItem = item;
+                break;
+              }
+            }
+            final int resolvedTemplateId = templateId != 0
+                ? templateId
+                : int.tryParse(cartItem?["templateId"].toString() ?? "0") ?? 0;
+            final List<Map<String, dynamic>> wishlistItems =
+                AppSharedPref().getGuestWishlistItems();
+
+            if (resolvedTemplateId != 0) {
+              final bool exists = wishlistItems.any(
+                (item) => item["templateId"] == resolvedTemplateId,
+              );
+              if (!exists) {
+                int nextId = 1;
+                for (final item in wishlistItems) {
+                  final int id =
+                      int.tryParse(item["id"].toString()) ?? 0;
+                  if (id >= nextId) {
+                    nextId = id + 1;
+                  }
+                }
+                final Map<String, dynamic> product = _demoProducts.firstWhere(
+                  (item) => item["templateId"] == resolvedTemplateId,
+                  orElse: () => {},
+                );
+                wishlistItems.add({
+                  "id": nextId,
+                  "name": productName.isNotEmpty
+                      ? productName
+                      : (product["name"] ?? cartItem?["name"] ?? ""),
+                  "thumbNail":
+                      product["thumbNail"] ?? cartItem?["thumbNail"],
+                  "priceReduce":
+                      product["priceReduce"] ?? cartItem?["priceReduce"],
+                  "priceUnit":
+                      product["priceUnit"] ?? cartItem?["priceUnit"],
+                  "productId": resolvedTemplateId,
+                  "templateId": resolvedTemplateId,
+                });
+              }
+            }
+            if (lineId != 0) {
+              cartItems.removeWhere(
+                (item) =>
+                    (int.tryParse(item["lineId"].toString()) ?? 0) == lineId,
+              );
+            }
+            AppSharedPref().setGuestWishlistItems(wishlistItems);
+            AppSharedPref().setGuestCartItems(cartItems);
+            int cartCount = 0;
+            for (final item in cartItems) {
+              cartCount += int.tryParse(item["qty"].toString()) ?? 0;
+            }
+            AppSharedPref().setGuestCartCount(cartCount);
+            return handler.resolve(
+              Response(
+                requestOptions: options,
+                data: {
+                  "success": true,
+                  "responseCode": 200,
+                  "message": "Moved to wishlist",
+                  "cartCount": cartCount,
+                  "wishlistCount": wishlistItems.length,
+                },
+                statusCode: 200,
+              ),
+            );
+          }
 
           return handler.next(options);
         },
