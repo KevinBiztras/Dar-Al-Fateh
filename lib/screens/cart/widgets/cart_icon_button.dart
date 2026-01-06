@@ -54,6 +54,7 @@ class CartIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+
       children: [
         SizedBox(
          width: AppSizes.width/1.07,
@@ -62,7 +63,7 @@ class CartIconButton extends StatelessWidget {
 
             style: OutlinedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-              side: BorderSide(color: Theme.of(context).colorScheme.onPrimary,width: 1.5)
+              side: BorderSide(color: Theme.of(context).colorScheme.onPrimary,width: .8)
             ),
             child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

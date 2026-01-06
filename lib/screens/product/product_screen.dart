@@ -875,19 +875,19 @@ class _ProductScreenState extends State<ProductScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         QuantityView(bloc: productPageBloc, counter: counter),
-                        AddToCartButtonView(
-                          productPageBloc,
-                          ApiConstant.baseUrl.contains('example.com')
-                              ? (int.tryParse(
-                                      widget.arguments[productIdKey]?.toString() ??
-                                          '') ??
-                                  productPageData?.templateId ??
-                                  productPageData?.productId ??
-                                  0)
-                              : (productPageData?.productId ?? 0),
-                          productPageData?.name ?? '',
-                          counter!,
-                        ),
+                      AddToCartButtonView(
+                        productPageBloc,
+                        ApiConstant.baseUrl.contains('example.com')
+                            ? (int.tryParse(
+                                    widget.arguments[productIdKey]?.toString() ??
+                                        '') ??
+                                productPageData?.templateId ??
+                                productPageData?.productId ??
+                                0)
+                            : (productPageData?.productId ?? 0),
+                        productPageData?.name ?? '',
+                        counter ?? 1,
+                      ),
                       ],
                     ),
                   ),

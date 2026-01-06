@@ -47,7 +47,9 @@ class WishlistScreenBloc extends Bloc<WishlistEvent,WishlistState>{
       }
     }else if(event is MoveToCartEvent){
       try {
-        var model = await repository?.moveToCart(event.productName, event.wishlistId, event.productId);
+        var model = await repository?.moveToCart(
+            event.productName, event.wishlistId, event.productId,
+            templateId: event.templateId);
         if (model != null) {
           emit( MoveToCartSuccess(model));
         } else {

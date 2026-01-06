@@ -31,8 +31,10 @@ class MoveToCartEvent extends WishlistEvent{
   final String productName;
   final int wishlistId;
   final int productId;
+  final int? templateId;
 
-  const MoveToCartEvent(this.productName,this.wishlistId,this.productId);
+  const MoveToCartEvent(this.productName,this.wishlistId,this.productId,
+      {this.templateId});
 
   @override
   List<Object> get props => [];

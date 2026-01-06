@@ -233,7 +233,8 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                   wishlistScreenBloc?.add(MoveToCartEvent(
                                       items?[index].name ?? "",
                                       items?[index].id ?? 0,
-                                      items?[index].productId ?? 0));
+                                      items?[index].productId ?? 0,
+                                      templateId: items?[index].templateId));
                                 },
                                 style: TextButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.onPrimary),
                                 child: Text(
@@ -300,4 +301,3 @@ class _WishlistScreenState extends State<WishlistScreen> {
   }
 
 }
-

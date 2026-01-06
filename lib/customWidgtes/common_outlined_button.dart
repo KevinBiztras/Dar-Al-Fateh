@@ -28,7 +28,7 @@ Widget commonButton(
   Color? textColor,
   Color? backgroundColor,
   Color? borderSideColor,
-  double borderRadius = 4,
+  double borderRadius = 11,
 }) {
   // Set smaller default sizes for width and height if not provided
   double buttonWidth =
@@ -37,16 +37,14 @@ Widget commonButton(
 
   return OutlinedButton(
     onPressed: onPressed,
-    child:
-        widget ??
-        Text(
-          text,
-          style: Theme.of(
-            context,
-          ).textTheme.titleLarge?.copyWith(color: textColor),
-        ),
     style: OutlinedButton.styleFrom(
-      side: borderSideColor != null ? BorderSide(color: borderSideColor) : null,
+      side: (borderSideColor != null || backgroundColor != null)
+          ? BorderSide(
+              color: borderSideColor ?? backgroundColor!,
+              width: 1.0,
+            )
+          : null,
+      
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
       ),
@@ -56,5 +54,13 @@ Widget commonButton(
       ),
       backgroundColor: backgroundColor,
     ),
+    child:
+        widget ??
+        Text(
+          text,
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(color: textColor, fontWeight: FontWeight.w500),
+        ),
   );
 }

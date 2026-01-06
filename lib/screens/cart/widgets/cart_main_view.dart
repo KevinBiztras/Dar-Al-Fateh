@@ -279,7 +279,7 @@ class CartMainView extends StatelessWidget {
             );
           },
         ),
-
+          // Price Details
         PriceDetails(
           totalProducts: model?.subtotal?.value,
           grandTotal: model?.grandtotal?.value,

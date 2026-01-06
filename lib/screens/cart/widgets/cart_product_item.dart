@@ -106,8 +106,7 @@ class _CartProductItemState extends State<CartProductItem> {
             ),
             child: Text(
               _quantity.toString(),
-              style: Theme.of(context).textTheme.titleLarge
-              ,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
           _quantityButton(
@@ -166,8 +165,8 @@ class _CartProductItemState extends State<CartProductItem> {
                   top: AppSizes.imageRadius,
                 ),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     // Image and qty dropdown
                     Column(
@@ -179,14 +178,6 @@ class _CartProductItemState extends State<CartProductItem> {
                           height: AppSizes.height / 7,
                           width: AppSizes.width / 4,
                         ),
-                        (widget.product?.isEditable ?? false)
-                            ? _quantityControl(context)
-                            : Text(
-                                "${widget.localizations?.translate(AppStringConstant.qty)} ${widget.product?.qty?.toInt().toString() ?? " "}",
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.titleSmall?.copyWith(fontSize: 14),
-                              ),
                       ],
                     ),
 
@@ -195,7 +186,7 @@ class _CartProductItemState extends State<CartProductItem> {
                     // Product Details
                     Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
@@ -214,10 +205,7 @@ class _CartProductItemState extends State<CartProductItem> {
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Text(
-                                "${widget.localizations?.translate(
-                                          AppStringConstant.subtotal,
-                                        ) ??
-                                        ""}: ",
+                                "${widget.localizations?.translate(AppStringConstant.subtotal) ?? ""}: ",
                                 style: Theme.of(
                                   context,
                                 ).textTheme.titleSmall?.copyWith(fontSize: 14),
@@ -235,6 +223,16 @@ class _CartProductItemState extends State<CartProductItem> {
                         ],
                       ),
                     ),
+                    // Quantity Control
+                    (widget.product?.isEditable ?? false)
+                        ? _quantityControl(context)
+                        : Text(
+                            "${widget.localizations?.translate(AppStringConstant.qty)} ${widget.product?.qty?.toInt().toString() ?? " "}",
+                            style: Theme.of(
+                              context,
+                            ).textTheme.titleSmall?.copyWith(fontSize: 14),
+                          ),
+
                     // Edit button
                     // Container(
                     //   decoration: BoxDecoration(
@@ -260,10 +258,11 @@ class _CartProductItemState extends State<CartProductItem> {
                     //     ),
                     //   ),
                     // )
+                    //----------------------------
                   ],
                 ),
               ),
-              const Divider(thickness: 1.0),
+
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                 child: Row(
@@ -295,13 +294,13 @@ class _CartProductItemState extends State<CartProductItem> {
                         );
                       },
                       context,
-                      // buttonColor: Colors.blue.shade300,
-                      borderColor: Colors.blue,
+                      buttonColor: Colors.grey.shade100,
+                      borderColor: Colors.grey.shade100,
                       iconColor: Colors.blue.shade800,
                     ),
                     _iconButton(
                       Icons.delete_forever,
-                     
+
                       widget.localizations?.translate(
                             AppStringConstant.removeItem,
                           ) ??
@@ -325,11 +324,13 @@ class _CartProductItemState extends State<CartProductItem> {
                       },
                       context,
                       iconColor: Colors.red,
-                      // borderColor: Colors.red,
+                      borderColor: Colors.grey.shade100,
+                      buttonColor: Colors.grey.shade100,
                     ),
                   ],
                 ),
               ),
+              const Divider(thickness: 1.0),
             ],
           ),
         ),
@@ -350,10 +351,16 @@ class _CartProductItemState extends State<CartProductItem> {
     child: OutlinedButton(
       onPressed: onTap,
       style: OutlinedButton.styleFrom(
-        backgroundColor:buttonColor?? Theme.of(context).colorScheme.secondaryContainer, // Button background color
+        backgroundColor:
+            buttonColor ??
+            Theme.of(
+              context,
+            ).colorScheme.secondaryContainer, // Button background color
         side: BorderSide(
-          color: borderColor ?? Theme.of(context).colorScheme.onPrimary, // Border color
-          width: 1.5,
+          color:
+              borderColor ??
+              Theme.of(context).colorScheme.onPrimary, // Border color
+          width: 1.0,
         ),
       ),
       child: Padding(
@@ -374,7 +381,9 @@ class _CartProductItemState extends State<CartProductItem> {
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
-                  color: iconColor ?? Theme.of(context).colorScheme.onPrimary, // Text color
+                  color:
+                      iconColor ??
+                      Theme.of(context).colorScheme.onPrimary, // Text color
                 ),
               ),
             ),

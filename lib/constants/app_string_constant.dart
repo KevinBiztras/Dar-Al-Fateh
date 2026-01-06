@@ -79,7 +79,7 @@ class AppStringConstant {
   static const String alreadyAccount = "alreadyAccount";
   static const String loadingMessage = "loadingMessage";
   static const String amountToBePaid = "amountToBePaid";
-  static const String proceed = "proceed";
+  static const String proceed = "proceed to buy";
   static const String items = "items";
   static const String removeItem = "removeItem";
   static const String subtotal = "subtotal";

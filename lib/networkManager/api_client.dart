@@ -754,6 +754,125 @@ abstract class ApiClient {
               ),
             );
           }
+          if (isPlaceholderHost &&
+              options.path.contains('my/wishlistToCart')) {
+            Map<String, dynamic> payload = {};
+            if (options.data is String) {
+              payload = json.decode(options.data as String);
+            } else if (options.data is Map) {
+              payload = Map<String, dynamic>.from(options.data as Map);
+            }
+            final int wishlistId =
+                int.tryParse(payload["wishlistId"].toString()) ?? 0;
+            final int templateId = int.tryParse(
+                    (payload["templateId"] ?? payload["productId"]).toString()) ??
+                0;
+            final String productName = payload["productName"]?.toString() ?? "";
+
+            final List<Map<String, dynamic>> wishlistItems =
+                AppSharedPref().getGuestWishlistItems();
+            Map<String, dynamic>? wishlistItem;
+            for (final item in wishlistItems) {
+              final int itemId = int.tryParse(item["id"].toString()) ?? 0;
+              if (itemId == wishlistId) {
+                wishlistItem = item;
+                break;
+              }
+            }
+
+            final List<Map<String, dynamic>> cartItems =
+                AppSharedPref().getGuestCartItems();
+            final int resolvedTemplateId = templateId != 0
+                ? templateId
+                : int.tryParse(wishlistItem?["templateId"].toString() ?? "0") ??
+                    0;
+            final Map<String, dynamic> product = _demoProducts.firstWhere(
+              (item) => item["templateId"] == resolvedTemplateId,
+              orElse: () => {},
+            );
+            if (resolvedTemplateId != 0) {
+              final int existingIndex = cartItems.indexWhere(
+                (item) =>
+                    (int.tryParse(item["templateId"].toString()) ?? 0) ==
+                    resolvedTemplateId,
+              );
+              if (existingIndex != -1) {
+                final Map<String, dynamic> existingItem = cartItems[existingIndex];
+                final int currentQty =
+                    int.tryParse(existingItem["qty"].toString()) ?? 0;
+                existingItem["qty"] = currentQty + 1;
+                final double unitPrice = _parsePrice(
+                  existingItem["priceReduce"] ?? existingItem["priceUnit"],
+                );
+                existingItem["total"] =
+                    (unitPrice * (existingItem["qty"] as int)).toStringAsFixed(2);
+                cartItems[existingIndex] = existingItem;
+              } else {
+                int nextLineId = 1;
+                for (final item in cartItems) {
+                  final int lineId =
+                      int.tryParse(item["lineId"].toString()) ?? 0;
+                  if (lineId >= nextLineId) {
+                    nextLineId = lineId + 1;
+                  }
+                }
+                final double unitPrice = _parsePrice(
+                  (product["priceReduce"] ??
+                          wishlistItem?["priceReduce"] ??
+                          product["priceUnit"] ??
+                          wishlistItem?["priceUnit"])
+                      ?.toString(),
+                );
+                cartItems.add({
+                  "lineId": nextLineId,
+                  "templateId": resolvedTemplateId,
+                  "productId": resolvedTemplateId,
+                  "name": productName.isNotEmpty
+                      ? productName
+                      : (product["name"] ?? wishlistItem?["name"] ?? ""),
+                  "thumbNail":
+                      product["thumbNail"] ?? wishlistItem?["thumbNail"],
+                  "priceReduce":
+                      product["priceReduce"] ?? wishlistItem?["priceReduce"],
+                  "priceUnit":
+                      product["priceUnit"] ?? wishlistItem?["priceUnit"],
+                  "qty": 1,
+                  "total": unitPrice.toStringAsFixed(2),
+                  "discount": "0.00",
+                  "isEditable": true,
+                });
+              }
+            }
+
+            if (wishlistId != 0) {
+              wishlistItems.removeWhere(
+                (item) =>
+                    (int.tryParse(item["id"].toString()) ?? 0) == wishlistId,
+              );
+            }
+
+            AppSharedPref().setGuestWishlistItems(wishlistItems);
+            AppSharedPref().setGuestCartItems(cartItems);
+            int cartCount = 0;
+            for (final item in cartItems) {
+              cartCount += int.tryParse(item["qty"].toString()) ?? 0;
+            }
+            AppSharedPref().setGuestCartCount(cartCount);
+
+            return handler.resolve(
+              Response(
+                requestOptions: options,
+                data: {
+                  "success": true,
+                  "responseCode": 200,
+                  "message": "Moved to cart",
+                  "cartCount": cartCount,
+                  "wishlistCount": wishlistItems.length,
+                },
+                statusCode: 200,
+              ),
+            );
+          }
 
           return handler.next(options);
         },

@@ -62,8 +62,8 @@ Widget commonOrderButton(BuildContext context, AppLocalizations? _localizations,
         Expanded(
             child: commonButton(context, onPressed,
                 (_localizations?.translate(title) ?? "").toUpperCase(),
-                textColor: Theme.of(context).colorScheme.secondaryContainer,
-                backgroundColor: color,
+                textColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                backgroundColor: const Color.fromARGB(255, 252, 232, 51).withValues(alpha: 1),
             height: AppSizes.height / 20)
 
             // ElevatedButton(

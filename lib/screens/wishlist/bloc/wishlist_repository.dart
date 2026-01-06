@@ -26,7 +26,8 @@ import 'package:flutter_project_structure/networkManager/api_client.dart';
 
 abstract class WishlistRepository{
   Future<WishlistModel> getWishlistItems();
-  Future<BaseModel> moveToCart(String productName, int wishlistId, int productId);
+  Future<BaseModel> moveToCart(String productName, int wishlistId, int productId,
+      {int? templateId});
   Future<BaseModel> removeFromWishlist(int wishlistId);
 }
 
@@ -39,12 +40,16 @@ class WishlistImpRepository implements WishlistRepository{
   }
 
   @override
-  Future<BaseModel> moveToCart(String productName, int wishlistId, int productId) async{
+  Future<BaseModel> moveToCart(String productName, int wishlistId, int productId,
+      {int? templateId}) async {
     BaseModel? model;
     Map<String, dynamic> data = {};
     data['productName'] = productName;
     data['wishlistId'] = wishlistId;
     data['productId'] = productId;
+    if (templateId != null) {
+      data['templateId'] = templateId;
+    }
     String body = json.encode(data);
     model = await ApiClient().moveWishlistToCart(body);
 
