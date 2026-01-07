@@ -36,6 +36,7 @@ Widget buildGridProduct(
   String? url,
   bool isCatalog = false,
   required VoidCallback postWishlistClick,
+  void Function(Products product, int quantity)? onAddToCart,
 }) {
   return GridView.builder(
     shrinkWrap: true,
@@ -115,12 +116,16 @@ Widget buildGridProduct(
                   ),
                 ),
               );
-      } else {
+        } else {
         var data = products[index];
+        // ----------Will Call if type is AppConstant.productDefault
+        // ----------ItemCard Widget is used to show each product in grid
+        // ----------imageSize is calculated to fit two items in one row with padding
         return ItemCard(
           product: data,
           postWishlistClick: postWishlistClick,
           imageSize: (AppSizes.width / 2.3) - AppSizes.mediumPadding,
+          onAddToCart: onAddToCart,
         );
       }
     },

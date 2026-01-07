@@ -61,8 +61,9 @@ import '../../product/bloc/product_screen_repository.dart';
 
 class ProductItemFullWidth extends StatefulWidget {
   final Products? product;
+  final void Function(Products product)? onAddToCart;
 
-  const ProductItemFullWidth({Key? key, this.product}) : super(key: key);
+  const ProductItemFullWidth({super.key, this.product,this.onAddToCart});
 
   @override
   State<StatefulWidget> createState() {
@@ -441,85 +442,94 @@ class ProductItemFullWidthState extends State<ProductItemFullWidth> {
                             border: Border.all(color: Colors.grey.shade400),
                           ),
                           child: InkWell(
-                            onTap: () {
-                              if ((AppSharedPref().getIfLogin() != null &&
-                                      AppSharedPref().getIfLogin() == true) ||
-                                  AppSharedPref().getGuestCheckout()) {
-                                debugPrint(
-                                    "product!.productCount.toString --> " +
-                                        widget.product!.productCount
-                                            .toString());
+                            // onTap: () {
+                            //   if ((AppSharedPref().getIfLogin() != null &&
+                            //           AppSharedPref().getIfLogin() == true) ||
+                            //       AppSharedPref().getGuestCheckout()) {
+                            //     debugPrint(
+                            //         "product!.productCount.toString --> " +
+                            //             widget.product!.productCount
+                            //                 .toString());
 
-                                if (widget.product!.productCount! > 1) {
-                                  AppDatabase.getDatabase().then(
-                                    (value) => value.recentProductDao
-                                        .insertRecentProduct(
-                                          RecentProduct(
-                                            templateId: widget
-                                                    .product?.templateId
-                                                    .toString() ??
-                                                '',
-                                            name: widget.product?.name,
-                                            priceUnit:
-                                                widget.product?.priceUnit,
-                                            priceReduce:
-                                                widget.product?.priceReduce,
-                                            image:
-                                                widget.product?.thumbNail ?? '',
-                                            productId:
-                                                widget.product?.productId ?? -1,
-                                            productCount: quantity ?? 1,
-                                          ),
-                                        )
-                                        .then(
-                                          (value) => RecentViewController
-                                              .controller.sink
-                                              .add(widget.product?.templateId
-                                                      ?.toString() ??
-                                                  ''),
-                                        ),
-                                  );
-                                  // DialogHelper.loaderDialog(
-                                  //     AppStringConstant.loadingMessage,
-                                  //     AppStringConstant.addToCartDescription,
-                                  //     context,
-                                  //     AppLocalizations.of(context));
-                                  processAddToCartRequest(
-                                      widget.product, context, quantity);
-                                  // Navigator.of(context)
-                                  //     .pushNamed(productPage,
-                                  //     arguments: getProductDataMap(
-                                  //         widget.product?.name ?? '',
-                                  //         widget.product?.templateId.toString() ?? ''))
-                                  //     .then((value) {
-                                  //   if (value == true) {
-                                  //     widget.postWishlistClick();
-                                  //     DialogHelper.loaderDialog(
-                                  //         AppStringConstant.loadingMessage,
-                                  //         AppStringConstant.addToCartDescription,
-                                  //         context,
-                                  //         AppLocalizations.of(context));
-                                  //   processAddToCartRequest(widget.product, context,quantity);
-                                  //   }
-                                  // });
-                                } else if (widget.product!.productCount! == 1) {
-                                  // DialogHelper.loaderDialog(
-                                  //     AppStringConstant.loadingMessage,
-                                  //     AppStringConstant.addToCartDescription,
-                                  //     context,
-                                  //     AppLocalizations.of(context));
-                                  processAddToCartRequest(
-                                      widget.product, context, quantity);
-                                }
-                              } else {
-                                DialogHelper.confirmationDialog(
-                                    "${AppLocalizations.of(context)?.translate(AppStringConstant.signInToContinue)}",
-                                    context,
-                                    AppLocalizations.of(context),
-                                    onConfirm: () async {
-                                  Navigator.pushNamed(context, loginSignup,
-                                      arguments: false);
-                                });
+                            //     if (widget.product!.productCount! > 1) {
+                            //       AppDatabase.getDatabase().then(
+                            //         (value) => value.recentProductDao
+                            //             .insertRecentProduct(
+                            //               RecentProduct(
+                            //                 templateId: widget
+                            //                         .product?.templateId
+                            //                         .toString() ??
+                            //                     '',
+                            //                 name: widget.product?.name,
+                            //                 priceUnit:
+                            //                     widget.product?.priceUnit,
+                            //                 priceReduce:
+                            //                     widget.product?.priceReduce,
+                            //                 image:
+                            //                     widget.product?.thumbNail ?? '',
+                            //                 productId:
+                            //                     widget.product?.productId ?? -1,
+                            //                 productCount: quantity ?? 1,
+                            //               ),
+                            //             )
+                            //             .then(
+                            //               (value) => RecentViewController
+                            //                   .controller.sink
+                            //                   .add(widget.product?.templateId
+                            //                           ?.toString() ??
+                            //                       ''),
+                            //             ),
+                            //       );
+                            //       // DialogHelper.loaderDialog(
+                            //       //     AppStringConstant.loadingMessage,
+                            //       //     AppStringConstant.addToCartDescription,
+                            //       //     context,
+                            //       //     AppLocalizations.of(context));
+                            //       processAddToCartRequest(
+                            //           widget.product, context, quantity);
+                            //       // Navigator.of(context)
+                            //       //     .pushNamed(productPage,
+                            //       //     arguments: getProductDataMap(
+                            //       //         widget.product?.name ?? '',
+                            //       //         widget.product?.templateId.toString() ?? ''))
+                            //       //     .then((value) {
+                            //       //   if (value == true) {
+                            //       //     widget.postWishlistClick();
+                            //       //     DialogHelper.loaderDialog(
+                            //       //         AppStringConstant.loadingMessage,
+                            //       //         AppStringConstant.addToCartDescription,
+                            //       //         context,
+                            //       //         AppLocalizations.of(context));
+                            //       //   processAddToCartRequest(widget.product, context,quantity);
+                            //       //   }
+                            //       // });
+                            //     } else if (widget.product!.productCount! == 1) {
+                            //       // DialogHelper.loaderDialog(
+                            //       //     AppStringConstant.loadingMessage,
+                            //       //     AppStringConstant.addToCartDescription,
+                            //       //     context,
+                            //       //     AppLocalizations.of(context));
+                            //       processAddToCartRequest(
+                            //           widget.product, context, quantity);
+                            //     }
+                            //   } else {
+                            //     DialogHelper.confirmationDialog(
+                            //         "${AppLocalizations.of(context)?.translate(AppStringConstant.signInToContinue)}",
+                            //         context,
+                            //         AppLocalizations.of(context),
+                            //         onConfirm: () async {
+                            //       Navigator.pushNamed(context, loginSignup,
+                            //           arguments: false);
+                            //     });
+                            //   }
+                            // },
+                            onTap: () {
+                              if(widget.onAddToCart!=null){
+                                widget.onAddToCart!(widget.product!);
+                              }else{
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('${widget.product?.name} added to cart'))
+                                );
                               }
                             },
                             child: const Icon(

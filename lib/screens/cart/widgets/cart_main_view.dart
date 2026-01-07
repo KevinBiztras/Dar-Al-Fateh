@@ -43,7 +43,7 @@ import 'cart_product_item.dart';
 
 class CartMainView extends StatelessWidget {
   const CartMainView(this.model, this.localizations, this.bloc, {Key? key})
-      : super(key: key);
+    : super(key: key);
 
   final CartViewModel? model;
   final AppLocalizations? localizations;
@@ -68,18 +68,20 @@ class CartMainView extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: AppSizes.imageRadius,
-                          vertical: AppSizes.linePadding),
+                        horizontal: AppSizes.imageRadius,
+                        vertical: AppSizes.linePadding,
+                      ),
                       child: Text(
-                          "${model?.cartCount} " +
-                              (localizations?.translate(
-                                          AppStringConstant.items) ??
-                                      "")
-                                  .toUpperCase(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.w600)),
+                        "${model?.cartCount} " +
+                            (localizations?.translate(
+                                      AppStringConstant.items,
+                                    ) ??
+                                    "")
+                                .toUpperCase(),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                     const Divider(thickness: 1),
                   ],
@@ -106,17 +108,17 @@ class CartMainView extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.topLeft,
                           child: Text(
-                              (localizations?.translate(
-                                        AppStringConstant.suggestedItems,
-                                      ) ??
-                                      "")
-                                  .toUpperCase(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall
-                                  ?.copyWith(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold)),
+                            (localizations?.translate(
+                                      AppStringConstant.suggestedItems,
+                                    ) ??
+                                    "")
+                                .toUpperCase(),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
                         ),
                       ),
                       ListView.separated(
@@ -126,21 +128,25 @@ class CartMainView extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.only(
-                                right: AppSizes.mediumPadding,
-                                left: AppSizes.mediumPadding,
-                                top: AppSizes.imageRadius),
+                              right: AppSizes.mediumPadding,
+                              left: AppSizes.mediumPadding,
+                              top: AppSizes.imageRadius,
+                            ),
                             child: InkWell(
                               onTap: () {
-                                Navigator.pushNamed(context, productPage,
-                                        arguments: getProductDataMap(
-                                            model?.accessoriesProducts?[index]
-                                                    .name ??
-                                                '',
-                                            model?.accessoriesProducts?[index]
-                                                    .templateId
-                                                    .toString() ??
-                                                ''))
-                                    .then((value) {
+                                Navigator.pushNamed(
+                                  context,
+                                  productPage,
+                                  arguments: getProductDataMap(
+                                    model?.accessoriesProducts?[index].name ??
+                                        '',
+                                    model
+                                            ?.accessoriesProducts?[index]
+                                            .templateId
+                                            .toString() ??
+                                        '',
+                                  ),
+                                ).then((value) {
                                   bloc?.add(const CartScreenDataFetchEvent());
                                   bloc?.emit(CartScreenInitial());
                                 });
@@ -149,7 +155,8 @@ class CartMainView extends StatelessWidget {
                                 children: [
                                   ImageView(
                                     url: model
-                                        ?.accessoriesProducts?[index].image,
+                                        ?.accessoriesProducts?[index]
+                                        .image,
                                     height: AppSizes.height / 7,
                                     width: AppSizes.width / 4,
                                   ),
@@ -159,81 +166,91 @@ class CartMainView extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                          model?.accessoriesProducts?[index]
-                                                  .name ??
-                                              "",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge
-                                              ?.copyWith(
-                                                  fontWeight:
-                                                      FontWeight.normal)),
+                                        model
+                                                ?.accessoriesProducts?[index]
+                                                .name ??
+                                            "",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                      ),
                                       SizedBox(height: AppSizes.imageRadius),
                                       Text(
-                                          model?.accessoriesProducts?[index]
-                                                  .priceUnit ??
-                                              "",
+                                        model
+                                                ?.accessoriesProducts?[index]
+                                                .priceUnit ??
+                                            "",
 
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge
-                                              ?.copyWith(
-                                                  fontWeight: FontWeight.bold)),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
                                       SizedBox(height: AppSizes.imageRadius),
                                       OutlinedButton(
-                                          onPressed: () {
-                                            processAddToCartRequest(
-                                                model?.accessoriesProducts?[
-                                                    index],
-                                                context);
-                                          },
-                                          style: OutlinedButton.styleFrom(
-                                            backgroundColor: Theme.of(context)
-                                                .colorScheme
-                                                .secondaryContainer,
-                                            side: BorderSide(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onPrimary,
-                                                width: 1.5),
+                                        onPressed: () {
+                                          processAddToCartRequest(
+                                            model?.accessoriesProducts?[index],
+                                            context,
+                                          );
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                          backgroundColor: Theme.of(
+                                            context,
+                                          ).colorScheme.secondaryContainer,
+                                          side: BorderSide(
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onPrimary,
+                                            width: 1.5,
                                           ),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 5),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                    Icons
-                                                        .shopping_cart_outlined,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onPrimary),
-                                                const SizedBox(
-                                                    width:
-                                                        AppSizes.linePadding),
-                                                Text(
-                                                    localizations?.translate(
-                                                            AppStringConstant
-                                                                .addToCart) ??
-                                                        "",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyMedium
-                                                        ?.copyWith(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 15,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .colorScheme
-                                                                .onPrimary))
-                                              ],
-                                            ),
-                                          )),
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 5,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.shopping_cart_outlined,
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.onPrimary,
+                                              ),
+                                              const SizedBox(
+                                                width: AppSizes.linePadding,
+                                              ),
+                                              Text(
+                                                localizations?.translate(
+                                                      AppStringConstant
+                                                          .addToCart,
+                                                    ) ??
+                                                    "",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15,
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).colorScheme.onPrimary,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ],
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
@@ -243,7 +260,7 @@ class CartMainView extends StatelessWidget {
                           return Divider();
                         },
                       ),
-                      Divider()
+                      Divider(),
                     ],
                   ),
                 ),
@@ -257,29 +274,36 @@ class CartMainView extends StatelessWidget {
               .toUpperCase(),
           onClick: () {
             DialogHelper.confirmationDialog(
-                AppStringConstant.emptyCartText, context, localizations,
-                onConfirm: () {
-              bloc?.add(SetCartEmpty());
-              bloc?.emit(CartScreenInitial());
-            });
+              AppStringConstant.emptyCartText,
+              context,
+              localizations,
+              onConfirm: () {
+                bloc?.add(SetCartEmpty());
+                bloc?.emit(CartScreenInitial());
+              },
+            );
           },
         ),
-        const SizedBox(
-          height: AppSizes.extraPadding,
-        ),
+        const SizedBox(height: AppSizes.extraPadding),
         CartIconButton(
           leadingIcon: Icons.arrow_forward,
-          title: localizations?.translate(AppStringConstant.continueShopping) ??
+          title:
+              localizations?.translate(AppStringConstant.continueShopping) ??
               "",
           onClick: () {
             Navigator.pushNamed(
               context,
               catalogPage,
-              arguments: getCatalogMap("", false, "Shop Vegitables", customerId: 0),
+              arguments: getCatalogMap(
+                "",
+                false,
+                "Shop Vegitables",
+                customerId: 0,
+              ),
             );
           },
         ),
-          // Price Details
+        // Price Details
         PriceDetails(
           totalProducts: model?.subtotal?.value,
           grandTotal: model?.grandtotal?.value,
@@ -358,7 +382,9 @@ class CartMainView extends StatelessWidget {
   //   }
   // }
   void processAddToCartRequest(
-      Accessories? product, BuildContext context) async {
+    Accessories? product,
+    BuildContext context,
+  ) async {
     ProductScreenRepositoryImp? repository = ProductScreenRepositoryImp();
     try {
       // BaseModel model =

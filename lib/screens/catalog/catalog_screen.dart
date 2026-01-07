@@ -48,19 +48,24 @@ import 'package:flutter_project_structure/customWidgtes/app_bar.dart';
 import 'package:flutter_project_structure/helper/app_localizations.dart';
 import 'package:flutter_project_structure/helper/app_shared_pref.dart';
 import 'package:flutter_project_structure/helper/loader.dart';
-import 'package:flutter_project_structure/models/CategoryScreenModel.dart';
+// import 'package:flutter_project_structure/models/CategoryScreenModel.dart';
 import 'package:flutter_project_structure/models/HomeScreenModel.dart';
+import 'package:flutter_project_structure/screens/cart/bloc/cart_screen_event.dart';
+import 'package:flutter_project_structure/screens/cart/bloc/cart_screen_state.dart';
 import 'package:flutter_project_structure/screens/catalog/bloc/catalog_screen_bloc.dart';
 import 'package:flutter_project_structure/screens/home/views/product_item_full_width.dart';
 import 'package:flutter_project_structure/screens/home/views/product_list_widgets/product_list_widgets.dart';
+import 'package:flutter_project_structure/screens/product/bloc/product_screen_repository.dart';
 import '../../constants/arguments_map.dart';
 import '../../models/FilterDataModel.dart';
+import 'package:flutter_project_structure/screens/cart/bloc/cart_screen_bloc.dart';
+
 
 // import '../../marketplace/marketplaceConstant/marketplace_arguments_map.dart';
 // import '../../marketplace/marketplaceModel/CatalogArgumentModel.dart';
 
 class CatalogScreen extends StatefulWidget {
-  Map<String, dynamic> catalogScreenPassData;
+  final Map<String, dynamic> catalogScreenPassData;
 
   CatalogScreen(this.catalogScreenPassData);
 
@@ -203,7 +208,9 @@ class _CatalogScreenState extends State<CatalogScreen> {
                         if (value != null) {
                           productList.clear();
                           offset = 0;
-                          catalogScreenBloc?.emit(CatalogScreenInitialState());
+                          setState(() {
+                            isLoading = true;
+                          });
                           catalogScreenBloc?.add(
                             FilterFetchDataEvent(value as Map<String, dynamic>),
                           );
@@ -237,7 +244,9 @@ class _CatalogScreenState extends State<CatalogScreen> {
                         if (value != null) {
                           productList.clear();
                           offset = 0;
-                          catalogScreenBloc?.emit(CatalogScreenInitialState());
+                          setState(() {
+                            isLoading = true;
+                          });
                           catalogScreenBloc?.add(
                             CatalogScreenDataFetchEvent(
                               widget.catalogScreenPassData[customerIdKey],
@@ -346,7 +355,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
             }
           } else if (state is CatalogScreenErrorState) {
             isLoading = false;
-            WidgetsBinding.instance?.addPostFrameCallback((_) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
               AlertMessage.showError(state.message ?? '', context);
             });
           }
@@ -363,7 +372,9 @@ class _CatalogScreenState extends State<CatalogScreen> {
                   onRefresh: () async {
                     isFromPagination = false;
                     offset = 0;
-                    catalogScreenBloc?.emit(CatalogScreenInitialState());
+                    setState(() {
+                      isLoading = true;
+                    });
                     if (widget.catalogScreenPassData[fromNotificationKey]) {
                       catalogScreenBloc?.add(
                         CatalogScreenDataFetchFromNotificationEvent(
@@ -413,6 +424,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                                   _localizations,
                                   isCatalog: true,
                                   postWishlistClick: postWishlistClick,
+                                  onAddToCart: (p, qty) => addToCart(p, qty),
                                 )
                               : listView(productList),
                           Visibility(
@@ -457,7 +469,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
       shrinkWrap: true,
       itemBuilder: (context, index) {
         var data = productList;
-        return ProductItemFullWidth(product: data[index]);
+        return ProductItemFullWidth(product: data[index],onAddToCart: addToCart,);
       },
     );
   }
@@ -489,9 +501,69 @@ class _CatalogScreenState extends State<CatalogScreen> {
                 ),
               );
         isFromPagination = true;
-        catalogScreenBloc?.emit(CatalogScreenInitialState());
+        setState(() {
+          isLoading = true;
+        });
       }
       // });
+    }
+  }
+
+  void addToCart(Products product, [int quantity = 1]) async {
+    // Try to obtain a CartScreenBloc if present in the widget tree.
+    CartScreenBloc? cartBloc;
+    try {
+      cartBloc = context.read<CartScreenBloc>();
+    } catch (e) {
+      cartBloc = null;
+    }
+
+    // If a CartScreenBloc is available (e.g. Cart page open), use it so the
+    // Cart UI (CartMainView) will receive events and refresh automatically.
+    if (cartBloc != null) {
+      // Dispatch event to add product
+      cartBloc.add(AddToCartEvent(product.productId ?? 0));
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${product.name} added to cart')),
+      );
+
+      try {
+        final state = await cartBloc.stream.firstWhere((s) =>
+            s is AddToCartItemSuccess || s is CartScreenError);
+        if (state is AddToCartItemSuccess) {
+          AlertMessage.showSuccess(state.data.message ?? '', context);
+          // refresh cart data/count
+          cartBloc.add(const CartScreenDataFetchEvent());
+        } else if (state is CartScreenError) {
+          AlertMessage.showError(state.message ?? '', context);
+        }
+      } catch (_) {
+        // ignore: avoid_print
+        print('Add to cart: no response from CartBloc');
+      }
+      return;
+    }
+
+    // If no CartScreenBloc is available, call the repository directly so adding
+    // to cart still works when the Cart page isn't in the widget tree.
+    try {
+      final repository = ProductScreenRepositoryImp();
+      final model = await repository.addTocart(
+          product.productId!.toString(), quantity);
+      if (model.success ?? false) {
+        AlertMessage.showSuccess(model.message ?? '', context);
+        // keep guest cart count up-to-date for badges etc.
+        AppSharedPref().setGuestCartCount(model.cartCount ?? 0);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${product.name} added to cart')),
+        );
+      } else {
+        AlertMessage.showError(model.message ?? '', context);
+      }
+    } catch (error) {
+      debugPrint(error.toString());
+      AlertMessage.showError(error.toString(), context);
     }
   }
 

@@ -500,3 +500,4 @@ Displays auto-scrolling banner
 
 This guide should help you understand the complete flow. Start with `home_screen.dart` and follow the data flow step by step!
 
+

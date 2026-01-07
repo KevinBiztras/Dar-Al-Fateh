@@ -168,7 +168,7 @@ class _CartProductItemState extends State<CartProductItem> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    // Image and qty dropdown
+                    // Image 
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
@@ -186,7 +186,7 @@ class _CartProductItemState extends State<CartProductItem> {
                     // Product Details
                     Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
@@ -196,9 +196,37 @@ class _CartProductItemState extends State<CartProductItem> {
                                 ?.copyWith(fontWeight: FontWeight.w500),
                           ),
                           const SizedBox(height: AppSizes.imageRadius),
-                          Text(
-                            widget.product?.priceUnit ?? "0.00",
-                            style: Theme.of(context).textTheme.titleLarge,
+                          Row(
+                            children: [
+                              Text(
+                                "Price: ",
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.titleSmall?.copyWith(fontSize: 14),
+                              ),
+                              Text(
+                                (widget.product?.priceReduce ?? '').isNotEmpty
+                                    ? (widget.product?.priceReduce ?? "0.00")
+                                    : (widget.product?.priceUnit ?? "0.00"),
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                              if ((widget.product?.priceReduce ?? '').isNotEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: AppSizes.linePadding,
+                                  ),
+                                  child: Text(
+                                    widget.product?.priceUnit ?? "0.00",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                        ),
+                                  ),
+                                ),
+                            ],
                           ),
                           const SizedBox(height: AppSizes.imageRadius),
                           Row(
