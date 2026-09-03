@@ -19,8 +19,10 @@
 import 'package:flutter/material.dart';
 
 class ApiConstant {
-  static const String baseUrl = 'https://example.com/';
-  static const String baseData = "authkey:authkey";
+  // static const String baseUrl = 'https://assets-genuine-robin-carol.trycloudflare.com/';
+    static const String baseUrl = 'https://example.com/';
+  // static const String baseData = "authkey:423b-85d9-57399a7a226e";
+  static const String baseData = "authkey:your_auth_key";
 
   static const bool isCacheFeatureEnabled = true;
   static const bool isPreFetchingFeatureEnabled = false;

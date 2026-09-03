@@ -35,18 +35,33 @@ import 'package:flutter_project_structure/utils/helper.dart';
 abstract class HomeScreenRepository {
   Future<HomePageData> getHomeData(int offset);
 
-  Future<void> callApiAndUpdateHiveDB(HiveService hiveService,
-      String homeBoxName, bool prefetch, String offset);
+  Future<void> callApiAndUpdateHiveDB(
+    HiveService hiveService,
+    String homeBoxName,
+    bool prefetch,
+    String offset,
+  );
 }
 
 class HomeScreenRepositoryImp implements HomeScreenRepository {
   @override
   Future<HomePageData> getHomeData(int offset) async {
+      print("🚀 getHomeData called");
+      print("1");
+
     final HiveService hiveService = HiveService();
+    print("2");
+
     String homeBoxName = HiveConstants.getHomePageModelBoxName();
+    print("3");
+
     String firebaseToken =
         await PushNotificationsManager().createFcmToken() ?? "";
+        print("4");
+
     String fcmDeviceId = AppSharedPref().getDeviceID() ?? "";
+    print("5");
+
     HomePageData? model;
     try {
       Map<String, dynamic> data = {};
@@ -54,13 +69,22 @@ class HomeScreenRepositoryImp implements HomeScreenRepository {
       data["fcmToken"] = firebaseToken;
       data["fcmDeviceId"] = fcmDeviceId;
       String body = json.encode(data);
-      model = await ApiClient()
-          .getHomePageData(apiKey, body, "text/plain", offset.toString(), "5");
+      model = await ApiClient().getHomePageData(
+        apiKey,
+        body,
+        "text/plain",
+        offset.toString(),
+        "5",
+      );
+      print("homepageDataCount = ${model.homepageDataCount}");
+      print("homepageDataList = ${model.homepageDataList?.length}");
+      print("categories = ${model.categories?.length}");
       if (offset == 0) {
         hiveService.addBox(model, homeBoxName);
       }
       model.homepageDataList?.forEach(
-          (element) => PrefetchHelper.prefetchFromHomePageResponse(element));
+        (element) => PrefetchHelper.prefetchFromHomePageResponse(element),
+      );
 
       return model;
     } catch (e) {
@@ -70,8 +94,12 @@ class HomeScreenRepositoryImp implements HomeScreenRepository {
   }
 
   @override
-  callApiAndUpdateHiveDB(HiveService hiveService, String homeBoxName,
-      bool prefetch, String offset) async {
+  callApiAndUpdateHiveDB(
+    HiveService hiveService,
+    String homeBoxName,
+    bool prefetch,
+    String offset,
+  ) async {
     bool internetAvailable = await Helper().isNetworkAvailable();
     String firebaseToken =
         await PushNotificationsManager().createFcmToken() ?? "";
@@ -86,12 +114,14 @@ class HomeScreenRepositoryImp implements HomeScreenRepository {
       data["fcmDeviceId"] = fcmDeviceId;
       String body = json.encode(data);
       HomePageData? model;
-      model = await ApiClient(isFromCache: true)
-          .getHomePageData(apiKey, body, "text/plain", offset, "5");
+      model = await ApiClient(
+        isFromCache: true,
+      ).getHomePageData(apiKey, body, "text/plain", offset, "5");
       hiveService.addBox(model, homeBoxName);
       if (prefetch) {
         model.homepageDataList?.forEach(
-            (element) => PrefetchHelper.prefetchFromHomePageResponse(element));
+          (element) => PrefetchHelper.prefetchFromHomePageResponse(element),
+        );
       }
     } catch (e) {
       debugPrint(e.toString());

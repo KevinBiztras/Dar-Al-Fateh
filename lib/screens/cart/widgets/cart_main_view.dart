@@ -1,19 +1,13 @@
+
+// ============ cart_main_view.dart ============
 /**
-
  * Webkul Software.
-
  * @package Mobikul App
-
  * @Category Mobikul
-
  * @author Webkul <support@webkul.com>
-
  * @Copyright (c) Webkul Software Private Limited (https://webkul.com)
-
  * @license https://store.webkul.com/license.html ASL Licence
-
  * @link https://store.webkul.com/license.html
-
  */
 
 import 'package:flutter/material.dart';
@@ -41,6 +35,13 @@ import '../../product/bloc/product_screen_repository.dart';
 import 'cart_icon_button.dart';
 import 'cart_product_item.dart';
 
+// ---- Brand tokens (kept local so this file is drop-in standalone) ----
+const Color _emerald = Color(0xFF1B5E20);
+const Color _leafGreen = Color(0xFF2E7D32);
+const Color _sage = Color(0xFFB7C9A8);
+const Color _sageLight = Color(0xFFEFF4EA);
+const Color _gold = Color(0xFFF9A825);
+
 class CartMainView extends StatelessWidget {
   const CartMainView(this.model, this.localizations, this.bloc, {Key? key})
     : super(key: key);
@@ -55,350 +56,321 @@ class CartMainView extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         // products list view
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: AppSizes.extraPadding),
-              child: Container(
-                color: Theme.of(context).cardColor,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSizes.mediumPadding,
+            AppSizes.mediumPadding,
+            AppSizes.mediumPadding,
+            0,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              // ---- "N ITEMS" pill header ----
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: _sageLight,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: _sage.withOpacity(0.6)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSizes.imageRadius,
-                        vertical: AppSizes.linePadding,
-                      ),
-                      child: Text(
-                        "${model?.cartCount} " +
-                            (localizations?.translate(
-                                      AppStringConstant.items,
-                                    ) ??
-                                    "")
-                                .toUpperCase(),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                    const Icon(
+                      Icons.shopping_basket_rounded,
+                      size: 16,
+                      color: _emerald,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      "${model?.cartCount} " +
+                          (localizations?.translate(AppStringConstant.items) ??
+                                  "")
+                              .toUpperCase(),
+                      style: const TextStyle(
+                        color: _emerald,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12.5,
+                        letterSpacing: 0.4,
                       ),
                     ),
-                    const Divider(thickness: 1),
                   ],
                 ),
               ),
-            ),
-            // Listview of products in cart
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (ctx, index) =>
-                  CartProductItem(model?.items?[index], localizations, bloc),
-              itemCount: (model?.items?.length ?? 0),
-            ),
-            if (AppSharedPref().getSplashData()?.isUpSelling ?? false)
-              Visibility(
-                visible: model?.accessoriesProducts?.isNotEmpty ?? false,
-                child: Container(
-                  color: Theme.of(context).cardColor,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 0.0),
-                        child: Align(
+              const SizedBox(height: AppSizes.mediumPadding),
+
+              // Listview of products in cart, now each item wrapped as a card
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (ctx, index) =>
+                    CartProductItem(model?.items?[index], localizations, bloc),
+                itemCount: (model?.items?.length ?? 0),
+              ),
+
+              if (AppSharedPref().getSplashData()?.isUpSelling ?? false)
+                Visibility(
+                  visible: model?.accessoriesProducts?.isNotEmpty ?? false,
+                  child: Container(
+                    margin: const EdgeInsets.only(top: AppSizes.linePadding),
+                    padding: const EdgeInsets.all(AppSizes.mediumPadding),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.04),
+                          blurRadius: 10,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        Align(
                           alignment: Alignment.topLeft,
-                          child: Text(
-                            (localizations?.translate(
-                                      AppStringConstant.suggestedItems,
-                                    ) ??
-                                    "")
-                                .toUpperCase(),
-                            style: Theme.of(context).textTheme.titleSmall
-                                ?.copyWith(
-                                  fontSize: 14,
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.local_florist_rounded,
+                                size: 16,
+                                color: _gold,
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                (localizations?.translate(
+                                          AppStringConstant.suggestedItems,
+                                        ) ??
+                                        "")
+                                    .toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 13,
                                   fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.3,
+                                  color: _emerald,
                                 ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      ListView.separated(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: model?.accessoriesProducts?.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                              right: AppSizes.mediumPadding,
-                              left: AppSizes.mediumPadding,
-                              top: AppSizes.imageRadius,
-                            ),
-                            child: InkWell(
+                        const SizedBox(height: AppSizes.mediumPadding),
+                        ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: model?.accessoriesProducts?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            final item = model?.accessoriesProducts?[index];
+                            return InkWell(
+                              borderRadius: BorderRadius.circular(12),
                               onTap: () {
                                 Navigator.pushNamed(
                                   context,
                                   productPage,
                                   arguments: getProductDataMap(
-                                    model?.accessoriesProducts?[index].name ??
-                                        '',
-                                    model
-                                            ?.accessoriesProducts?[index]
-                                            .templateId
-                                            .toString() ??
-                                        '',
+                                    item?.name ?? '',
+                                    item?.templateId.toString() ?? '',
                                   ),
                                 ).then((value) {
                                   bloc?.add(const CartScreenDataFetchEvent());
                                   bloc?.emit(CartScreenInitial());
                                 });
                               },
-                              child: Row(
-                                children: [
-                                  ImageView(
-                                    url: model
-                                        ?.accessoriesProducts?[index]
-                                        .image,
-                                    height: AppSizes.height / 7,
-                                    width: AppSizes.width / 4,
-                                  ),
-                                  const SizedBox(width: AppSizes.mediumPadding),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        model
-                                                ?.accessoriesProducts?[index]
-                                                .name ??
-                                            "",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.normal,
-                                            ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: AppSizes.imageRadius,
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: ImageView(
+                                        url: item?.image,
+                                        height: AppSizes.height / 7,
+                                        width: AppSizes.width / 4,
                                       ),
-                                      SizedBox(height: AppSizes.imageRadius),
-                                      Text(
-                                        model
-                                                ?.accessoriesProducts?[index]
-                                                .priceUnit ??
-                                            "",
-
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge
-                                            ?.copyWith(
+                                    ),
+                                    const SizedBox(
+                                      width: AppSizes.mediumPadding,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            item?.name ?? "",
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            item?.priceUnit ?? "",
+                                            style: const TextStyle(
                                               fontWeight: FontWeight.bold,
+                                              color: _leafGreen,
+                                              fontSize: 15,
                                             ),
-                                      ),
-                                      SizedBox(height: AppSizes.imageRadius),
-                                      OutlinedButton(
-                                        onPressed: () {
-                                          processAddToCartRequest(
-                                            model?.accessoriesProducts?[index],
-                                            context,
-                                          );
-                                        },
-                                        style: OutlinedButton.styleFrom(
-                                          backgroundColor: Theme.of(
-                                            context,
-                                          ).colorScheme.secondaryContainer,
-                                          side: BorderSide(
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.onPrimary,
-                                            width: 1.5,
                                           ),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 5,
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.shopping_cart_outlined,
-                                                color: Theme.of(
+                                          const SizedBox(height: 8),
+                                          SizedBox(
+                                            height: 34,
+                                            child: OutlinedButton(
+                                              onPressed: () {
+                                                processAddToCartRequest(
+                                                  item,
                                                   context,
-                                                ).colorScheme.onPrimary,
-                                              ),
-                                              const SizedBox(
-                                                width: AppSizes.linePadding,
-                                              ),
-                                              Text(
-                                                localizations?.translate(
-                                                      AppStringConstant
-                                                          .addToCart,
-                                                    ) ??
-                                                    "",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium
-                                                    ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 15,
-                                                      color: Theme.of(
-                                                        context,
-                                                      ).colorScheme.onPrimary,
+                                                );
+                                              },
+                                              style: OutlinedButton.styleFrom(
+                                                backgroundColor: _emerald,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                side: BorderSide.none,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 12,
                                                     ),
                                               ),
-                                            ],
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  const Icon(
+                                                    Icons
+                                                        .add_shopping_cart_rounded,
+                                                    color: Colors.white,
+                                                    size: 16,
+                                                  ),
+                                                  const SizedBox(width: 6),
+                                                  Text(
+                                                    localizations?.translate(
+                                                          AppStringConstant
+                                                              .addToCart,
+                                                        ) ??
+                                                        "",
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 12.5,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return Divider();
-                        },
-                      ),
-                      Divider(),
-                    ],
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return Divider(color: _sage.withOpacity(0.3));
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-          ],
+              const SizedBox(height: AppSizes.mediumPadding),
+            ],
+          ),
         ),
 
-        CartIconButton(
-          leadingIcon: Icons.remove_shopping_cart,
-          title: (localizations?.translate(AppStringConstant.emptyCart) ?? "")
-              .toUpperCase(),
-          onClick: () {
-            DialogHelper.confirmationDialog(
-              AppStringConstant.emptyCartText,
-              context,
-              localizations,
-              onConfirm: () {
-                bloc?.add(SetCartEmpty());
-                bloc?.emit(CartScreenInitial());
-              },
-            );
-          },
-        ),
-        const SizedBox(height: AppSizes.extraPadding),
-        CartIconButton(
-          leadingIcon: Icons.arrow_forward,
-          title:
-              localizations?.translate(AppStringConstant.continueShopping) ??
-              "",
-          onClick: () {
-            Navigator.pushNamed(
-              context,
-              catalogPage,
-              arguments: getCatalogMap(
-                "",
-                false,
-                "Shop Vegitables",
-                customerId: 0,
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSizes.mediumPadding,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: CartIconButton(
+                  leadingIcon: Icons.remove_shopping_cart,
+                  title:
+                      (localizations?.translate(AppStringConstant.emptyCart) ??
+                              "")
+                          .toUpperCase(),
+                  onClick: () {
+                    DialogHelper.confirmationDialog(
+                      AppStringConstant.emptyCartText,
+                      context,
+                      localizations,
+                      onConfirm: () {
+                        bloc?.add(SetCartEmpty());
+                        bloc?.emit(CartScreenInitial());
+                      },
+                    );
+                  },
+                ),
               ),
-            );
-          },
+            ],
+          ),
         ),
+        const SizedBox(height: AppSizes.linePadding),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSizes.mediumPadding,
+          ),
+          child: CartIconButton(
+            leadingIcon: Icons.arrow_forward,
+            title:
+                localizations?.translate(AppStringConstant.continueShopping) ??
+                "",
+            onClick: () {
+              Navigator.pushNamed(
+                context,
+                catalogPage,
+                arguments: getCatalogMap(
+                  "",
+                  false,
+                  "Shop Vegitables",
+                  customerId: 0,
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: AppSizes.mediumPadding),
         // Price Details
-        PriceDetails(
-          totalProducts: model?.subtotal?.value,
-          grandTotal: model?.grandtotal?.value,
-          localizations: localizations,
-          totalTax: model?.tax?.value,
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSizes.mediumPadding,
+          ),
+          child: PriceDetails(
+            totalProducts: model?.subtotal?.value,
+            grandTotal: model?.grandtotal?.value,
+            localizations: localizations,
+            totalTax: model?.tax?.value,
+          ),
         ),
+        const SizedBox(height: AppSizes.mediumPadding),
       ],
     );
   }
 
-  // void onTap(BuildContext context){
-  //   if ((AppSharedPref().getIfLogin() != null &&
-  //       AppSharedPref().getIfLogin() == true) ||
-  //       AppSharedPref().getGuestCheckout()) {
-  //     debugPrint("product!.productCount.toString --> " +
-  //         widget.product!.productCount.toString());
-  //
-  //     if (widget.product!.productCount! > 1) {
-  //       AppDatabase.getDatabase().then(
-  //             (value) => value.recentProductDao
-  //             .insertRecentProduct(
-  //           RecentProduct(
-  //               templateId: widget.product?.templateId
-  //                   .toString() ??
-  //                   '',
-  //               name: widget.product?.name,
-  //               priceUnit: widget.product?.priceUnit,
-  //               priceReduce:
-  //               widget.product?.priceReduce,
-  //               image:
-  //               widget.product?.thumbNail ?? '',
-  //               productId:
-  //               widget.product?.productId ?? -1,
-  //               productCount:
-  //               widget.product?.productCount ??
-  //                   -1),
-  //         )
-  //             .then(
-  //               (value) => RecentViewController
-  //               .controller.sink
-  //               .add(widget.product?.templateId
-  //               ?.toString() ??
-  //               ''),
-  //         ),
-  //       );
-  //
-  //       Navigator.of(context)
-  //           .pushNamed(productPage,
-  //           arguments: getProductDataMap(
-  //               widget.product?.name ?? '',
-  //               widget.product?.templateId
-  //                   .toString() ??
-  //                   ''))
-  //           .then((value) {
-  //         if (value == true) {
-  //           widget.postWishlistClick();
-  //         }
-  //       });
-  //     } else if (widget.product!.productCount! == 1) {
-  //       DialogHelper.loaderDialog(
-  //           AppStringConstant.loadingMessage,
-  //           AppStringConstant.addToCartDescription,
-  //           context,
-  //           AppLocalizations.of(context));
-  //       processAddToCartRequest(widget.product, context);
-  //     }
-  //   } else {
-  //     DialogHelper.confirmationDialog(
-  //         "${AppLocalizations.of(context)?.translate(AppStringConstant.signInToContinue)}",
-  //         context,
-  //         AppLocalizations.of(context),
-  //         onConfirm: () async {
-  //           Navigator.pushNamed(context, loginSignup,
-  //               arguments: false);
-  //         });
-  //   }
-  // }
   void processAddToCartRequest(
     Accessories? product,
     BuildContext context,
   ) async {
     ProductScreenRepositoryImp? repository = ProductScreenRepositoryImp();
     try {
-      // BaseModel model =
-      //     await repository.addTocart(product!.productId!.toString(), 1);
-      // if (model.success!) {
-      //   bloc?.emit(CartScreenInitial());
-      //
-      //   AlertMessage.showSuccess(model.message!, context);
-      //   AppSharedPref().setGuestCartCount(model.cartCount ?? 0);
-      // } else {
-      //   AlertMessage.showError(model.message!, context);
-      // }
       bloc?.add(AddToCartEvent(product?.productId ?? 0));
-
       Navigator.pop(context);
     } catch (error, _) {
       debugPrint(error.toString());

@@ -1,28 +1,3 @@
-/*
- * *
- *
- *  Webkul Software.
- *
- *  @package Mobikul App
- *
- *  @Category Mobikul
- *
- *  @author Webkul <support@webkul.com>
- *
- *  @Copyright (c) Webkul Software Private Limited (https://webkul.com)
- *
- *  @license https://store.webkul.com/license.html ASL Licence
- *
- *  @link https://store.webkul.com/license.html
- *
- * /
- */
-
-// ignore_for_file: must_be_immutable
-
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 /**
 
  * Webkul Software.
@@ -41,6 +16,9 @@ import 'package:flutter/cupertino.dart';
 
  */
 
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project_structure/constants/app_constants.dart';
 import 'package:flutter_project_structure/helper/app_localizations.dart';
@@ -87,7 +65,9 @@ class _ProductVariantsState extends State<ProductVariants> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(
-                      top: AppSizes.linePadding, bottom: AppSizes.linePadding),
+                    top: AppSizes.linePadding,
+                    bottom: AppSizes.linePadding,
+                  ),
                   child: Text(
                     attribute.name ?? "",
                     style: Theme.of(context).textTheme.titleLarge,
@@ -95,14 +75,18 @@ class _ProductVariantsState extends State<ProductVariants> {
                 ),
                 AppConstant.radioType == attribute.type
                     ? _buildRadio(
-                    attribute.attributeId ?? 0, attribute.values ?? [])
+                        attribute.attributeId ?? 0,
+                        attribute.values ?? [],
+                      )
                     : AppConstant.colorType == attribute.type
                     ? _buildColor(
-                    attribute.attributeId ?? 0, attribute.values ?? [])
-                    : _createDropdown(attribute.values ?? [])
+                        attribute.attributeId ?? 0,
+                        attribute.values ?? [],
+                      )
+                    : _createDropdown(attribute.values ?? []),
               ],
             );
-          })
+          }),
         ],
       ),
     );
@@ -112,29 +96,23 @@ class _ProductVariantsState extends State<ProductVariants> {
   Widget _buildRadio(int attributeId, List<Values> data) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisSize: MainAxisSize.min,
-    children: List.generate(
-      data.length,
-          (index) {
-        return RadioListTile<String>(
-          dense: true,
-          activeColor: Theme.of(context).colorScheme.onPrimary,
-          selected: data[index].isSelected ?? false,
-          title: Text(
-            data[index].name ?? "",
-          ),
-          value: data[index].name ?? "",
-          groupValue:
-          (data[index].isSelected ?? false) ? data[index].name : "",
-          onChanged: (value) {
-            for (Values d in data) {
-              d.isSelected = false;
-            }
-            data[index].isSelected = true;
-            updateSelection();
-          },
-        );
-      },
-    ),
+    children: List.generate(data.length, (index) {
+      return RadioListTile<String>(
+        dense: true,
+        activeColor: Theme.of(context).colorScheme.onPrimary,
+        selected: data[index].isSelected ?? false,
+        title: Text(data[index].name ?? ""),
+        value: data[index].name ?? "",
+        groupValue: (data[index].isSelected ?? false) ? data[index].name : "",
+        onChanged: (value) {
+          for (Values d in data) {
+            d.isSelected = false;
+          }
+          data[index].isSelected = true;
+          updateSelection();
+        },
+      );
+    }),
   );
 
   Widget _createDropdown(List<Values> data) {
@@ -152,10 +130,12 @@ class _ProductVariantsState extends State<ProductVariants> {
         border: OutlineInputBorder(),
       ),
       items: data
-          .map((Values optionData) => DropdownMenuItem(
-        child: Text(optionData.name.toString()),
-        value: optionData,
-      ))
+          .map(
+            (Values optionData) => DropdownMenuItem(
+              child: Text(optionData.name.toString()),
+              value: optionData,
+            ),
+          )
           .toList(),
       onChanged: (value) {
         for (Values d in data) {
@@ -183,8 +163,10 @@ class _ProductVariantsState extends State<ProductVariants> {
           data[index].isSelected = true;
           updateSelection();
         },
-        child: _colorContainer(data[index].isSelected ?? false,
-            color: HexColor.fromHex(color)),
+        child: _colorContainer(
+          data[index].isSelected ?? false,
+          color: HexColor.fromHex(color),
+        ),
       );
     }),
   );
@@ -196,17 +178,20 @@ class _ProductVariantsState extends State<ProductVariants> {
         height: AppSizes.widgetBorderRadius,
         width: (AppSizes.widgetBorderRadius + AppSizes.normalPadding),
         decoration: BoxDecoration(
-            border: Border.all(
-                color: isSelected
-                    ? Theme.of(context).primaryColorDark
-                    : Theme.of(context).dividerColor),
-            color: (color != null) ? color : AppColors.background),
+          border: Border.all(
+            color: isSelected
+                ? Theme.of(context).primaryColorDark
+                : Theme.of(context).dividerColor,
+          ),
+          color: (color != null) ? color : AppColors.background,
+        ),
         child: (size != null)
             ? Center(
-            child: Text(
-              size,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ))
+                child: Text(
+                  size,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              )
             : null,
       ),
     );
@@ -244,7 +229,8 @@ class _ProductVariantsState extends State<ProductVariants> {
       for (Values v in a.values ?? []) {
         if (v.isSelected ?? false) {
           combination.add(
-              Combinations(valueId: v.valueId, attributeId: a.attributeId));
+            Combinations(valueId: v.valueId, attributeId: a.attributeId),
+          );
         }
       }
     }
@@ -264,8 +250,9 @@ class _ProductVariantsState extends State<ProductVariants> {
         widget.productPageData?.addToCart = v.addToCart;
         widget.productPageData?.stockDisplayMsg = v.stockDisplayMsg;
 
-        widget.productPageBloc
-            ?.emit(ProductScreenSuccess(widget.productPageData));
+        widget.productPageBloc?.emit(
+          ProductScreenSuccess(widget.productPageData),
+        );
         print("*******true---${widget.productPageData?.productId}");
         break;
       }

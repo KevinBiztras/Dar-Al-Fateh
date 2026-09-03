@@ -156,6 +156,7 @@ double _parsePrice(String? value) {
 abstract class ApiClient {
   factory ApiClient({String? baseUrl, bool isFromCache = false}) {
     Dio dio = Dio();
+    print("BASE URL = ${dio.options.baseUrl}");
     dio.options = BaseOptions(
       receiveTimeout: Duration(seconds: 100000),
       connectTimeout: Duration(seconds: 100000),
@@ -212,6 +213,12 @@ abstract class ApiClient {
         onRequest: (options, handler) {
           reqOptions = options;
 
+          print("========== API REQUEST ==========");
+          print("BASE URL = ${dio.options.baseUrl}");
+          print("PATH = ${options.path}");
+          print("FULL URL = ${options.uri}");
+          print("=================================");
+
           // Intercept homepage API call for demo mode
           final isPlaceholderHost = dio.options.baseUrl.contains('example.com');
           if (isPlaceholderHost && options.path.contains('mobikul/homepage')) {
@@ -227,8 +234,9 @@ abstract class ApiClient {
                       "title": "New Arrivals",
                       "slider_mode": "default",
                       "url": "",
-                      "products":
-                          _demoProducts.map((item) => Map<String, dynamic>.from(item)).toList(),
+                      "products": _demoProducts
+                          .map((item) => Map<String, dynamic>.from(item))
+                          .toList(),
                     },
                   ],
                 },
@@ -271,17 +279,17 @@ abstract class ApiClient {
                     {
                       "bannerName": "B1",
                       "bannerType": "image",
-                      "url": "assets/images/bannerimage1.png",
+                      "url": "assets/images/bannerimage0.1.jpg",
                     },
                     {
                       "bannerName": "B2",
                       "bannerType": "image",
-                      "url": "assets/images/bannerimage2.png",
+                      "url": "assets/images/bannerimage0.2.jpg",
                     },
                     {
                       "bannerName": "B3",
                       "bannerType": "image",
-                      "url": "assets/images/bannerimage3.png",
+                      "url": "assets/images/bannerimage0.3.jpg",
                     },
                   ],
                 },
@@ -335,8 +343,9 @@ abstract class ApiClient {
               "available_max_price": 49.99,
               "min_price": 19.99,
               "max_price": 49.99,
-              "products":
-                  _demoProducts.map((item) => Map<String, dynamic>.from(item)).toList(),
+              "products": _demoProducts
+                  .map((item) => Map<String, dynamic>.from(item))
+                  .toList(),
             };
 
             return handler.resolve(
@@ -357,11 +366,10 @@ abstract class ApiClient {
             }
             final int productId =
                 int.tryParse(payload["productId"].toString()) ?? 0;
-            final int addQty =
-                int.tryParse(payload["add_qty"].toString()) ?? 1;
+            final int addQty = int.tryParse(payload["add_qty"].toString()) ?? 1;
 
-            final List<Map<String, dynamic>> cartItems =
-                AppSharedPref().getGuestCartItems();
+            final List<Map<String, dynamic>> cartItems = AppSharedPref()
+                .getGuestCartItems();
             final Map<String, dynamic> product = _demoProducts.firstWhere(
               (item) => item["productId"] == productId,
               orElse: () => {},
@@ -371,7 +379,8 @@ abstract class ApiClient {
                 (item) => item["productId"] == productId,
               );
               if (existingIndex != -1) {
-                final Map<String, dynamic> existingItem = cartItems[existingIndex!];
+                final Map<String, dynamic> existingItem =
+                    cartItems[existingIndex!];
                 final int currentQty =
                     int.tryParse(existingItem["qty"].toString()) ?? 0;
                 existingItem["qty"] = currentQty + addQty;
@@ -379,7 +388,9 @@ abstract class ApiClient {
                   existingItem["priceReduce"] ?? existingItem["priceUnit"],
                 );
                 existingItem["total"] =
-                    (unitPrice * (existingItem["qty"] as int)).toStringAsFixed(2);
+                    (unitPrice * (existingItem["qty"] as int)).toStringAsFixed(
+                      2,
+                    );
                 cartItems[existingIndex] = existingItem;
               } else {
                 int nextLineId = 1;
@@ -451,10 +462,11 @@ abstract class ApiClient {
               !options.path.contains('setToEmpty')) {
             final String lineIdRaw = options.path.split('/').last;
             final int lineId = int.tryParse(lineIdRaw) ?? 0;
-            final List<Map<String, dynamic>> cartItems =
-                AppSharedPref().getGuestCartItems();
+            final List<Map<String, dynamic>> cartItems = AppSharedPref()
+                .getGuestCartItems();
             cartItems.removeWhere(
-              (item) => (int.tryParse(item["lineId"].toString()) ?? 0) == lineId,
+              (item) =>
+                  (int.tryParse(item["lineId"].toString()) ?? 0) == lineId,
             );
             AppSharedPref().setGuestCartItems(cartItems);
             int cartCount = 0;
@@ -486,10 +498,9 @@ abstract class ApiClient {
             } else if (options.data is Map) {
               payload = Map<String, dynamic>.from(options.data as Map);
             }
-            final int setQty =
-                int.tryParse(payload["set_qty"].toString()) ?? 1;
-            final List<Map<String, dynamic>> cartItems =
-                AppSharedPref().getGuestCartItems();
+            final int setQty = int.tryParse(payload["set_qty"].toString()) ?? 1;
+            final List<Map<String, dynamic>> cartItems = AppSharedPref()
+                .getGuestCartItems();
             for (int i = 0; i < cartItems.length; i++) {
               final Map<String, dynamic> item = cartItems[i];
               final int itemLineId =
@@ -502,8 +513,7 @@ abstract class ApiClient {
                   final double unitPrice = _parsePrice(
                     item["priceReduce"] ?? item["priceUnit"],
                   );
-                  item["total"] =
-                      (unitPrice * setQty).toStringAsFixed(2);
+                  item["total"] = (unitPrice * setQty).toStringAsFixed(2);
                   cartItems[i] = item;
                 }
                 break;
@@ -531,15 +541,16 @@ abstract class ApiClient {
           if (isPlaceholderHost &&
               options.path.contains('mobikul/mycart/') &&
               options.method.toUpperCase() == 'POST') {
-            final List<Map<String, dynamic>> cartItems =
-                AppSharedPref().getGuestCartItems();
+            final List<Map<String, dynamic>> cartItems = AppSharedPref()
+                .getGuestCartItems();
             double subtotalValue = 0.0;
             int cartCount = 0;
             for (final item in cartItems) {
               final int qty = int.tryParse(item["qty"].toString()) ?? 0;
               cartCount += qty;
-              final double unitPrice =
-                  _parsePrice(item["priceReduce"] ?? item["priceUnit"]);
+              final double unitPrice = _parsePrice(
+                item["priceReduce"] ?? item["priceUnit"],
+              );
               subtotalValue += unitPrice * qty;
             }
             AppSharedPref().setGuestCartCount(cartCount);
@@ -569,8 +580,8 @@ abstract class ApiClient {
           }
           if (isPlaceholderHost &&
               options.path.contains('mobikul/my/wishlists')) {
-            final List<Map<String, dynamic>> wishlistItems =
-                AppSharedPref().getGuestWishlistItems();
+            final List<Map<String, dynamic>> wishlistItems = AppSharedPref()
+                .getGuestWishlistItems();
             return handler.resolve(
               Response(
                 requestOptions: options,
@@ -595,8 +606,8 @@ abstract class ApiClient {
             final int templateId =
                 int.tryParse(payload["productId"].toString()) ?? 0;
             final String productName = payload["productName"]?.toString() ?? "";
-            final List<Map<String, dynamic>> wishlistItems =
-                AppSharedPref().getGuestWishlistItems();
+            final List<Map<String, dynamic>> wishlistItems = AppSharedPref()
+                .getGuestWishlistItems();
             final Map<String, dynamic> product = _demoProducts.firstWhere(
               (item) => item["templateId"] == templateId,
               orElse: () => {},
@@ -608,8 +619,7 @@ abstract class ApiClient {
               if (!exists) {
                 int nextId = 1;
                 for (final item in wishlistItems) {
-                  final int id =
-                      int.tryParse(item["id"].toString()) ?? 0;
+                  final int id = int.tryParse(item["id"].toString()) ?? 0;
                   if (id >= nextId) {
                     nextId = id + 1;
                   }
@@ -645,10 +655,12 @@ abstract class ApiClient {
               options.path.contains('my/removeFromWishlist/')) {
             final String productIdRaw = options.path.split('/').last;
             final int templateId = int.tryParse(productIdRaw) ?? 0;
-            final List<Map<String, dynamic>> wishlistItems =
-                AppSharedPref().getGuestWishlistItems();
+            final List<Map<String, dynamic>> wishlistItems = AppSharedPref()
+                .getGuestWishlistItems();
             wishlistItems.removeWhere(
-              (item) => (int.tryParse(item["templateId"].toString()) ?? 0) == templateId,
+              (item) =>
+                  (int.tryParse(item["templateId"].toString()) ?? 0) ==
+                  templateId,
             );
             AppSharedPref().setGuestWishlistItems(wishlistItems);
             return handler.resolve(
@@ -671,14 +683,13 @@ abstract class ApiClient {
             } else if (options.data is Map) {
               payload = Map<String, dynamic>.from(options.data as Map);
             }
-            final int lineId =
-                int.tryParse(payload["line_id"].toString()) ?? 0;
+            final int lineId = int.tryParse(payload["line_id"].toString()) ?? 0;
             final int templateId =
                 int.tryParse(payload["productId"].toString()) ?? 0;
             final String productName = payload["productName"]?.toString() ?? "";
 
-            final List<Map<String, dynamic>> cartItems =
-                AppSharedPref().getGuestCartItems();
+            final List<Map<String, dynamic>> cartItems = AppSharedPref()
+                .getGuestCartItems();
             Map<String, dynamic>? cartItem;
             for (final item in cartItems) {
               final int itemLineId =
@@ -691,8 +702,8 @@ abstract class ApiClient {
             final int resolvedTemplateId = templateId != 0
                 ? templateId
                 : int.tryParse(cartItem?["templateId"].toString() ?? "0") ?? 0;
-            final List<Map<String, dynamic>> wishlistItems =
-                AppSharedPref().getGuestWishlistItems();
+            final List<Map<String, dynamic>> wishlistItems = AppSharedPref()
+                .getGuestWishlistItems();
 
             if (resolvedTemplateId != 0) {
               final bool exists = wishlistItems.any(
@@ -701,8 +712,7 @@ abstract class ApiClient {
               if (!exists) {
                 int nextId = 1;
                 for (final item in wishlistItems) {
-                  final int id =
-                      int.tryParse(item["id"].toString()) ?? 0;
+                  final int id = int.tryParse(item["id"].toString()) ?? 0;
                   if (id >= nextId) {
                     nextId = id + 1;
                   }
@@ -716,12 +726,10 @@ abstract class ApiClient {
                   "name": productName.isNotEmpty
                       ? productName
                       : (product["name"] ?? cartItem?["name"] ?? ""),
-                  "thumbNail":
-                      product["thumbNail"] ?? cartItem?["thumbNail"],
+                  "thumbNail": product["thumbNail"] ?? cartItem?["thumbNail"],
                   "priceReduce":
                       product["priceReduce"] ?? cartItem?["priceReduce"],
-                  "priceUnit":
-                      product["priceUnit"] ?? cartItem?["priceUnit"],
+                  "priceUnit": product["priceUnit"] ?? cartItem?["priceUnit"],
                   "productId": resolvedTemplateId,
                   "templateId": resolvedTemplateId,
                 });
@@ -754,8 +762,7 @@ abstract class ApiClient {
               ),
             );
           }
-          if (isPlaceholderHost &&
-              options.path.contains('my/wishlistToCart')) {
+          if (isPlaceholderHost && options.path.contains('my/wishlistToCart')) {
             Map<String, dynamic> payload = {};
             if (options.data is String) {
               payload = json.decode(options.data as String);
@@ -764,13 +771,15 @@ abstract class ApiClient {
             }
             final int wishlistId =
                 int.tryParse(payload["wishlistId"].toString()) ?? 0;
-            final int templateId = int.tryParse(
-                    (payload["templateId"] ?? payload["productId"]).toString()) ??
+            final int templateId =
+                int.tryParse(
+                  (payload["templateId"] ?? payload["productId"]).toString(),
+                ) ??
                 0;
             final String productName = payload["productName"]?.toString() ?? "";
 
-            final List<Map<String, dynamic>> wishlistItems =
-                AppSharedPref().getGuestWishlistItems();
+            final List<Map<String, dynamic>> wishlistItems = AppSharedPref()
+                .getGuestWishlistItems();
             Map<String, dynamic>? wishlistItem;
             for (final item in wishlistItems) {
               final int itemId = int.tryParse(item["id"].toString()) ?? 0;
@@ -780,12 +789,12 @@ abstract class ApiClient {
               }
             }
 
-            final List<Map<String, dynamic>> cartItems =
-                AppSharedPref().getGuestCartItems();
+            final List<Map<String, dynamic>> cartItems = AppSharedPref()
+                .getGuestCartItems();
             final int resolvedTemplateId = templateId != 0
                 ? templateId
                 : int.tryParse(wishlistItem?["templateId"].toString() ?? "0") ??
-                    0;
+                      0;
             final Map<String, dynamic> product = _demoProducts.firstWhere(
               (item) => item["templateId"] == resolvedTemplateId,
               orElse: () => {},
@@ -797,7 +806,8 @@ abstract class ApiClient {
                     resolvedTemplateId,
               );
               if (existingIndex != -1) {
-                final Map<String, dynamic> existingItem = cartItems[existingIndex];
+                final Map<String, dynamic> existingItem =
+                    cartItems[existingIndex];
                 final int currentQty =
                     int.tryParse(existingItem["qty"].toString()) ?? 0;
                 existingItem["qty"] = currentQty + 1;
@@ -805,7 +815,9 @@ abstract class ApiClient {
                   existingItem["priceReduce"] ?? existingItem["priceUnit"],
                 );
                 existingItem["total"] =
-                    (unitPrice * (existingItem["qty"] as int)).toStringAsFixed(2);
+                    (unitPrice * (existingItem["qty"] as int)).toStringAsFixed(
+                      2,
+                    );
                 cartItems[existingIndex] = existingItem;
               } else {
                 int nextLineId = 1;
@@ -918,7 +930,7 @@ abstract class ApiClient {
         },
       ),
     );
-    return _ApiClient(dio, baseUrl: baseUrl);
+    return _ApiClient(dio, baseUrl: baseUrl ?? ApiConstant.baseUrl);
   }
 
   // @POST(Apis.getHomePage)
@@ -943,74 +955,7 @@ abstract class ApiClient {
   // Future<SplashScreenModel> getSplashData(@Field() String apiKey);
   @FormUrlEncoded()
   @POST(Apis.getSplashData)
-  Future<SplashScreenModel> getSplashData(@Field() String apiKey) async {
-    // Fake successful splash data - works 100% offline
-    await Future.delayed(const Duration(milliseconds: 800));
-
-    return SplashScreenModel.fromJson({
-      "success": true,
-      "homePageData": {
-        "carouselImages": [
-          {
-            "imageUrl":
-                "https://via.placeholder.com/800x400/FF6B6B/FFFFFF?text=Flash+Sale+50%25+Off",
-          },
-          {
-            "imageUrl":
-                "https://via.placeholder.com/800x400/4ECDC4/FFFFFF?text=New+Arrivals",
-          },
-          {
-            "imageUrl":
-                "https://via.placeholder.com/800x400/45B7D1/FFFFFF?text=Free+Shipping",
-          },
-        ],
-        "bannerImages": [
-          {
-            "imageUrl":
-                "https://via.placeholder.com/800x250/FFA502/FFFFFF?text=Mega+Sale+Ends+Soon",
-            "bannerLink": "",
-          },
-        ],
-        "featuredCategories": [
-          {
-            "id": "1",
-            "name": "Men",
-            "imageUrl":
-                "https://via.placeholder.com/300/6C5CE7/FFFFFF?text=Men",
-            "hasChildren": true,
-          },
-          {
-            "id": "2",
-            "name": "Women",
-            "imageUrl":
-                "https://via.placeholder.com/300/FDCB6E/FFFFFF?text=Women",
-            "hasChildren": true,
-          },
-          {
-            "id": "3",
-            "name": "Kids",
-            "imageUrl":
-                "https://via.placeholder.com/300/74B9FF/FFFFFF?text=Kids",
-            "hasChildren": true,
-          },
-          {
-            "id": "4",
-            "name": "Electronics",
-            "imageUrl":
-                "https://via.placeholder.com/300/A29BFE/FFFFFF?text=Electronics",
-            "hasChildren": true,
-          },
-        ],
-        "newProducts": [],
-        "featuredProducts": [],
-      },
-      "appLogo": "https://via.placeholder.com/200/2D3436/FFFFFF?text=SHOP",
-      "appName": "Demo Store",
-      "currency": "USD",
-      "currencySymbol": "\$",
-      "isRtl": false,
-    });
-  }
+  Future<SplashScreenModel> getSplashData(@Field() String apiKey);
 
   @FormUrlEncoded()
   @POST(Apis.getProductData)

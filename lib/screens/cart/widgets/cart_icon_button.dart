@@ -1,43 +1,22 @@
-/*
- * *
- *
- *  Webkul Software.
- *
- *  @package Mobikul App
- *
- *  @Category Mobikul
- *
- *  @author Webkul <support@webkul.com>
- *
- *  @Copyright (c) Webkul Software Private Limited (https://webkul.com)
- *
- *  @license https://store.webkul.com/license.html ASL Licence
- *
- *  @link https://store.webkul.com/license.html
- *
- * /
- */
 
+
+
+// ============ cart_icon_button.dart ============
 /**
-
  * Webkul Software.
-
  * @package Mobikul App
-
  * @Category Mobikul
-
  * @author Webkul <support@webkul.com>
-
  * @Copyright (c) Webkul Software Private Limited (https://webkul.com)
-
  * @license https://store.webkul.com/license.html ASL Licence
-
  * @link https://store.webkul.com/license.html
-
  */
 
 import 'package:flutter/material.dart';
 import 'package:flutter_project_structure/constants/app_constants.dart';
+
+const Color _emerald = Color(0xFF1B5E20);
+const Color _sage = Color(0xFFB7C9A8);
 
 class CartIconButton extends StatelessWidget {
   const CartIconButton({
@@ -53,34 +32,36 @@ class CartIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-
-      children: [
-        SizedBox(
-         width: AppSizes.width/1.07,
-          height: AppSizes.itemHeight,
-          child: OutlinedButton(onPressed: onClick,
-
-            style: OutlinedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-              side: BorderSide(color: Theme.of(context).colorScheme.onPrimary,width: .8)
-            ),
-            child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSizes.imageRadius),
-                child: Icon(leadingIcon,color: Theme.of(context).colorScheme.onPrimary,size: 22,),
-              ),
-              Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style:Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 13, fontWeight: FontWeight.bold,color:Theme.of(context).colorScheme.onPrimary))
-            ],
-
-          ),),
+    return SizedBox(
+      width: double.infinity,
+      height: AppSizes.itemHeight,
+      child: OutlinedButton(
+        onPressed: onClick,
+        style: OutlinedButton.styleFrom(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          side: BorderSide(color: _sage, width: 1),
         ),
-      ],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(leadingIcon, color: _emerald, size: 20),
+            const SizedBox(width: AppSizes.linePadding),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: _emerald,
+                letterSpacing: 0.3,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

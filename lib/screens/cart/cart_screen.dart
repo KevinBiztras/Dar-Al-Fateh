@@ -39,6 +39,18 @@ import 'package:flutter_project_structure/screens/cart/widgets/cart_main_view.da
 
 import '../../constants/route_constant.dart';
 
+import 'package:flutter/material.dart';
+
+class DarAlFatehColors {
+  static const Color emerald = Color(0xFF1B5E20);
+  static const Color leafGreen = Color(0xFF2E7D32);
+  static const Color sage = Color(0xFFB7C9A8);
+  static const Color sageLight = Color(0xFFEFF4EA);
+  static const Color gold = Color(0xFFF9A825);
+  static const Color goldDeep = Color(0xFFE8930C);
+  static const Color danger = Color(0xFFD32F2F);
+}
+
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
 

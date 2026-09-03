@@ -1,184 +1,4 @@
-// // ignore_for_file: prefer_const_constructors
 
-// /**
-
-//  * Webkul Software.
-
-//  * @package Mobikul App
-
-//  * @Category Mobikul
-
-//  * @author Webkul <support@webkul.com>
-
-//  * @Copyright (c) Webkul Software Private Limited (https://webkul.com)
-
-//  * @license https://store.webkul.com/license.html ASL Licence
-
-//  * @link https://store.webkul.com/license.html
-
-//  */
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:flutter_project_structure/constants/app_constants.dart';
-// import 'package:flutter_project_structure/constants/app_string_constant.dart';
-// import 'package:flutter_project_structure/customWidgtes/common_outlined_button.dart';
-// import 'package:flutter_project_structure/helper/app_localizations.dart';
-
-// import '../bloc/product_screen_bloc.dart';
-// import '../bloc/product_screen_event.dart';
-// import '../bloc/product_screen_state.dart';
-
-// class QuantityView extends StatefulWidget {
-//   ValueChanged<int>? callBack;
-//   ProductScreenBloc? bloc;
-//   int? counter;
-
-//   QuantityView({this.callBack, this.bloc, this.counter});
-
-//   @override
-//   State<StatefulWidget> createState() {
-//     return _QuantityViewState();
-//   }
-// }
-
-// class _QuantityViewState extends State<QuantityView> {
-//   TextEditingController controller = TextEditingController();
-//   ProductScreenBloc? bloc;
-//   AppLocalizations? _localizations;
-
-//   @override
-//   void initState() {
-//     controller.text =
-//         "${widget.counter} ${_localizations?.translate(AppStringConstant.unit) ?? 'Unit'}";
-//     super.initState();
-//   }
-
-//   @override
-//   void didChangeDependencies() {
-//     _localizations = AppLocalizations.of(context);
-//     super.didChangeDependencies();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       // margin: EdgeInsets.zero,
-//       // padding: const EdgeInsets.all(AppSizes.normalPadding),
-//       margin: const EdgeInsets.symmetric(vertical: AppSizes.linePadding),
-//       padding: const EdgeInsets.symmetric(
-//         // vertical: AppSizes.linePadding,
-//         horizontal: AppSizes.normalPadding,
-//       ),
-//       color: Theme.of(context).cardColor,
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.start,
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Text(
-//             _localizations?.translate(AppStringConstant.quantity) ?? '',
-//             style: Theme.of(context).textTheme.titleSmall,
-//           ),
-//           SizedBox(height: AppSizes.linePadding),
-//           // Divider(),
-//           SizedBox(height: AppSizes.linePadding),
-//           SizedBox(
-//             height: AppSizes.width / 10,
-//             child: Row(
-//               crossAxisAlignment: CrossAxisAlignment.stretch,
-//               children: <Widget>[
-//                 commonButton(
-//                   context,
-//                   () {
-//                     if (widget.counter! > 1) {
-//                       widget.counter = (widget.counter ?? 1) - 1;
-//                       changeQty();
-//                     }
-//                   },
-//                   '',
-//                   widget: Icon(Icons.remove, size: 16, color: AppColors.white),
-//                   width: AppSizes.width / 26,
-//                   height: AppSizes.width / 36,
-//                   backgroundColor: AppColors.black,
-//                   textColor: Theme.of(context).colorScheme.secondaryContainer,
-//                 ),
-
-//                 SizedBox(width: 10),
-//                 // Container(
-//                 //   width: AppSizes.width / 6,
-//                 //   color: Colors.black,
-//                 //   child: InkWell(
-//                 //       onTap: () {
-//                 //         // setState(() {
-//                 //         widget.counter = (widget.counter ?? 1) + 1;
-//                 //         changeQty();
-//                 //         // });
-//                 //       },
-//                 //       child: Icon(
-//                 //         Icons.add,
-//                 //         size: 30,
-//                 //         color: AppColors.white,
-//                 //       )),
-//                 // ),
-//                 commonButton(
-//                   context,
-//                   () {
-//                     widget.counter = (widget.counter ?? 1) + 1;
-//                     changeQty();
-//                   },
-//                   '',
-//                   widget: Icon(Icons.add, size: 16, color: AppColors.white),
-//                   width: AppSizes.width / 26,
-//                   height: AppSizes.width / 36,
-//                   backgroundColor: AppColors.black,
-//                   textColor: Theme.of(context).colorScheme.secondaryContainer,
-//                 ),
-//                 Spacer(),
-//                 SizedBox(
-//                   width: AppSizes.width / 6,
-//                   child: TextField(
-//                     enabled: false,
-//                     controller: controller,
-//                     textAlign: TextAlign.center,
-//                     style: Theme.of(context).textTheme.bodyLarge,
-//                     keyboardType: TextInputType.number,
-//                     decoration: InputDecoration(border: InputBorder.none),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   void changeQty() {
-//     print("qadsqds--${widget.counter}");
-//     widget.bloc?.add(QuantityUpdateEvent(widget.counter));
-//     widget.bloc?.emit(ProductScreenInitial());
-//     controller.text =
-//         ("${widget.counter}" +
-//         ((widget.counter! > 1)
-//             ? " ${_localizations?.translate(AppStringConstant.units)}"
-//             : " ${_localizations?.translate(AppStringConstant.unit)}"));
-//   }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ignore_for_file: prefer_const_constructors
 
 /**
  * Webkul Software.
@@ -215,8 +35,6 @@ class QuantityView extends StatefulWidget {
 }
 
 class _QuantityViewState extends State<QuantityView> {
-  TextEditingController controller = TextEditingController();
-  ProductScreenBloc? bloc;
   AppLocalizations? _localizations;
   late int _counter;
 
@@ -230,91 +48,146 @@ class _QuantityViewState extends State<QuantityView> {
   void didChangeDependencies() {
     _localizations = AppLocalizations.of(context);
     super.didChangeDependencies();
-    _syncControllerText();
+  }
+
+  String get _unitLabel {
+    if (_counter > 1) {
+      return _localizations?.translate(AppStringConstant.units) ?? 'Units';
+    }
+    return _localizations?.translate(AppStringConstant.unit) ?? 'Unit';
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
-      color: Theme.of(context).cardColor,
-      padding: const EdgeInsets.symmetric(
-        // vertical: AppSizes.normalPadding,
-        horizontal: AppSizes.normalPadding,
-      ),
+      color: theme.cardColor,
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            _localizations?.translate(AppStringConstant.quantity) ?? 'Quantity',
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-          
-          // Quantity controls
-          Row(
+          // Label
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              commonButton(
-                context,
-                () {
-                  if (_counter > 1) {
-                    setState(() {
-                      _counter -= 1;
-                    });
-                    changeQty(_counter);
-                  }
-                },
-                '',
-                widget: Icon(Icons.remove, size: 17, color: AppColors.white),
-                width: AppSizes.width / 20,
-                height: AppSizes.width / 30,
-                backgroundColor: AppColors.black,
-                textColor: Theme.of(context).colorScheme.secondaryContainer,
-              ),
-              
-              SizedBox(
-                width: AppSizes.width / 6,
-                child: TextField(
-                  enabled: false,
-                  controller: controller,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(border: InputBorder.none),
+              Text(
+                _localizations?.translate(AppStringConstant.quantity) ??
+                    'Quantity',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: Colors.grey[600],
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
                 ),
               ),
-              
-              commonButton(
-                context,
-                () {
-                  setState(() {
-                    _counter += 1;
-                  });
-                  changeQty(_counter);
-                },
-                '',
-                widget: Icon(Icons.add, size: 17, color: AppColors.white),
-                width: AppSizes.width / 26,
-                height: AppSizes.width / 36,
-                backgroundColor: AppColors.black,
-                textColor: Theme.of(context).colorScheme.secondaryContainer,
+              SizedBox(height: 2),
+              Text(
+                '$_counter $_unitLabel',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ],
+          ),
+
+          // Pill counter
+          Container(
+            decoration: BoxDecoration(
+              color: theme.colorScheme.onPrimary.withOpacity(0.07),
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(
+                color: theme.colorScheme.onPrimary.withOpacity(0.15),
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Decrement
+                _CounterButton(
+                  icon: Icons.remove,
+                  onTap: () {
+                    if (_counter > 1) {
+                      setState(() => _counter--);
+                      _changeQty(_counter);
+                    }
+                  },
+                  enabled: _counter > 1,
+                ),
+
+                // Count display
+                SizedBox(
+                  width: 44,
+                  child: Center(
+                    child: Text(
+                      '$_counter',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Increment
+                _CounterButton(
+                  icon: Icons.add,
+                  onTap: () {
+                    setState(() => _counter++);
+                    _changeQty(_counter);
+                  },
+                  enabled: true,
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  void changeQty(int counter) {
+  void _changeQty(int counter) {
     widget.bloc?.add(QuantityUpdateEvent(counter));
     widget.bloc?.emit(ProductScreenInitial());
     widget.callBack?.call(counter);
-    _syncControllerText();
   }
+}
 
-  void _syncControllerText() {
-    final unitText = _counter > 1
-        ? _localizations?.translate(AppStringConstant.units)
-        : _localizations?.translate(AppStringConstant.unit);
-    controller.text = "$_counter ${unitText ?? 'Unit'}";
+class _CounterButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  final bool enabled;
+
+  const _CounterButton({
+    required this.icon,
+    required this.onTap,
+    required this.enabled,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final color = enabled
+        ? Theme.of(context).colorScheme.onPrimary
+        : Colors.grey[300]!;
+    return InkWell(
+      onTap: enabled ? onTap : null,
+      borderRadius: BorderRadius.circular(30),
+      child: Container(
+        width: 36,
+        height: 36,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: enabled
+              ? Theme.of(context).colorScheme.onPrimary
+              : Colors.grey[200],
+        ),
+        child: Icon(
+          icon,
+          size: 18,
+          color: enabled
+              ? Theme.of(context).colorScheme.secondaryContainer
+              : Colors.grey[400],
+        ),
+      ),
+    );
   }
 }

@@ -85,6 +85,7 @@ dependencies:
   # flutter_facebook_auth: ^7.1.2
   upgrader: ^12.3.0
   connectivity_plus: ^7.0.0
+  collection: ^1.18.0
 
 
 #dependency_overrides:
@@ -150,6 +151,9 @@ flutter:
     - assets/images/summer_image.jpeg
     - assets/images/winter_carrot.jpeg
     - assets/images/summer_image1.jpeg
+    - assets/images/bannerimage0.1.jpg
+    - assets/images/bannerimage0.2.jpg
+    - assets/images/bannerimage0.3.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

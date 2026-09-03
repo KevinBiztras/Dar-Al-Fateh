@@ -43,7 +43,7 @@ Widget buildGridProduct(
     physics: const NeverScrollableScrollPhysics(),
     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 2,
-      childAspectRatio: 0.74,
+      childAspectRatio: 0.60,
     ),
     itemCount: (products.length.isEven) ? products.length : products.length + 1,
 
@@ -116,7 +116,7 @@ Widget buildGridProduct(
                   ),
                 ),
               );
-        } else {
+      } else {
         var data = products[index];
         // ----------Will Call if type is AppConstant.productDefault
         // ----------ItemCard Widget is used to show each product in grid
