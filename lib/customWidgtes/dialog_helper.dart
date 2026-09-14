@@ -174,61 +174,190 @@ class DialogHelper {
     );
   }
 
-  static Future<void> forgotPasswordDialog(
-      BuildContext context,
-      AppLocalizations? localizations,
-      String title,
-      String message, {
-        ValueChanged<String>? onConfirm,
-        ValueChanged<bool>? onCancel,
-        bool isForgotPassword = true,
-        String email = "",
-      }) {
-    final controller = TextEditingController(text: email);
-    return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        title: Text(title),
-        content: Column(
+static Future<void> forgotPasswordDialog(
+  BuildContext context,
+  AppLocalizations? localizations,
+  String title,
+  String message, {
+  ValueChanged<String>? onConfirm,
+  ValueChanged<bool>? onCancel,
+  bool isForgotPassword = true,
+  String email = "",
+}) {
+  final controller = TextEditingController(text: email);
+
+  const pageColor = Color(0xFFF4FAF6);
+  const fieldColor = Color(0xFFF8F5F0);
+  const greenColor = Color(0xFF2E7D32);
+  const linkColor = Color(0xFF806B43);
+  const textColor = Color(0xFF1C241D);
+
+  final fieldBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(20),
+    borderSide: const BorderSide(
+      color: Color(0xFFD6D9D2),
+    ),
+  );
+
+  return showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (ctx) => AlertDialog(
+      backgroundColor: pageColor,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+      ),
+      insetPadding: const EdgeInsets.symmetric(
+        horizontal: 24,
+        vertical: 24,
+      ),
+      titlePadding: const EdgeInsets.fromLTRB(24, 28, 24, 12),
+      contentPadding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+      actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
+      title: Text(
+        title,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          color: textColor,
+          fontSize: 22,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      content: SingleChildScrollView(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(message),
-            if (isForgotPassword)
-              TextField(
-                controller: controller,
-                decoration: InputDecoration(
-                  hintText: localizations?.translate(AppStringConstant.emailAddress),
+            Text(
+              message,
+              style: const TextStyle(
+                color: textColor,
+                fontSize: 15,
+                height: 1.5,
+              ),
+            ),
+            if (isForgotPassword) ...[
+              const SizedBox(height: 24),
+              Text(
+                localizations?.translate(
+                      AppStringConstant.emailAddress,
+                    ) ??
+                    "",
+                style: const TextStyle(
+                  color: textColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: controller,
+                cursorColor: textColor,
+                style: const TextStyle(
+                  color: textColor,
+                  fontSize: 18,
+                ),
+                decoration: InputDecoration(
+                  hintText: localizations?.translate(
+                    AppStringConstant.emailAddress,
+                  ),
+                  hintStyle: const TextStyle(
+                    color: Color(0xFF94948E),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  filled: true,
+                  fillColor: fieldColor,
+                  isDense: true,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
+                  border: fieldBorder,
+                  enabledBorder: fieldBorder,
+                  focusedBorder: fieldBorder.copyWith(
+                    borderSide: const BorderSide(
+                      color: Color(0xFFD9CEB8),
+                      width: 2,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
-        actions: [
-          TextButton(
-            style: _dialogButtonStyle,
-            onPressed: () {
-              if (isForgotPassword && controller.text.isEmpty) {
-                AlertMessage.showError(localizations?.translate(AppStringConstant.invalidEmail) ?? '', context);
-                return;
-              }
-              Navigator.pop(ctx);
-              onConfirm?.call(controller.text.trim());
-            },
-            child: Text(localizations?.translate(AppStringConstant.ok) ?? "", style: const TextStyle(color: AppColors.white)),
-          ),
-          TextButton(
-            style: _dialogButtonStyle,
-            onPressed: () {
-              Navigator.pop(ctx);
-              onCancel?.call(true);
-            },
-            child: Text(localizations?.translate(AppStringConstant.cancel) ?? "", style: const TextStyle(color: AppColors.white)),
-          ),
-        ],
       ),
-    );
-  }
-
+      actions: [
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: greenColor,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(double.infinity, 48),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onPressed: () {
+                if (isForgotPassword && controller.text.isEmpty) {
+                  AlertMessage.showError(
+                    localizations?.translate(
+                          AppStringConstant.invalidEmail,
+                        ) ??
+                        '',
+                    context,
+                  );
+                  return;
+                }
+                Navigator.pop(ctx);
+                onConfirm?.call(controller.text.trim());
+              },
+              child: Text(
+                localizations?.translate(AppStringConstant.ok) ?? "",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: linkColor,
+                minimumSize: const Size(double.infinity, 44),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(ctx);
+                onCancel?.call(true);
+              },
+              child: Text(
+                localizations?.translate(AppStringConstant.cancel) ?? "",
+                style: const TextStyle(
+                  color: linkColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
   static Future<void> searchDialog(
       BuildContext context,
       AppLocalizations? localizations,
