@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 
 class ApiConstant {
   // static const String baseUrl = 'https://assets-genuine-robin-carol.trycloudflare.com/';
-    static const String baseUrl = 'https://example.com/';
+  static const String baseUrl = 'https://example.com/';
   // static const String baseData = "authkey:423b-85d9-57399a7a226e";
   static const String baseData = "authkey:your_auth_key";
 
@@ -124,3 +124,21 @@ class AppColors {
   static const blue = Color(0xFF3D79EC);
   static const lightBlue = Color(0xCFD9D0F6);
 }
+
+const List<Map<String, dynamic>> orderItems = [
+  {
+    'title': 'Your Orders',
+    'subtitle': 'Follow, view or pay your orders',
+    'image': 'lib/assets/images/bag.png',
+  },
+  {
+    'title': 'Your Invoices',
+    'subtitle': 'Follow, download or pay your invoices',
+    'image': 'lib/assets/images/bill.png',
+  },
+  {
+    'title': 'Connection & Security',
+    'subtitle': 'Configure your connection parameters',
+    'image': 'lib/assets/images/portal-connection.png',
+  },
+];

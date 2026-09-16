@@ -24,6 +24,7 @@ import 'package:flutter_project_structure/constants/app_string_constant.dart';
 import 'package:flutter_project_structure/customWidgtes/badge_icon.dart';
 import 'package:flutter_project_structure/helper/app_localizations.dart';
 import 'package:flutter_project_structure/models/UserDataModel.dart';
+import 'package:flutter_project_structure/screens/accountInfoCustom/account_screen_custom.dart';
 import 'package:flutter_project_structure/screens/bottomNavigationBar/bloc/nav_bar_cubit.dart';
 import 'package:flutter_project_structure/screens/cart/bloc/cart_screen_bloc.dart';
 import 'package:flutter_project_structure/screens/cart/bloc/cart_screen_repository.dart';
@@ -82,10 +83,15 @@ class _NavBarViewState extends State<NavBarView> {
             CartScreenBloc(repository: CartScreenRepositoryImp()),
         child: const CartScreen(),
       ),
+      // BlocProvider(
+      //   create: (context) =>
+      //       ProfileScreenBloc(repository: ProfileScreenRepositoryImp()),
+      //   child: const ProfileScreen(),
+      // )
       BlocProvider(
         create: (context) =>
             ProfileScreenBloc(repository: ProfileScreenRepositoryImp()),
-        child: const ProfileScreen(),
+        child: const AccountScreenCustom(),
       )
     ];
     return WillPopScope(
