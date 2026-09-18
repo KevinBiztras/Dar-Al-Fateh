@@ -4,7 +4,7 @@ import 'package:flutter_project_structure/constants/app_constants.dart';
 class ProfileDrawer extends StatelessWidget {
   final String fullName;
   final String email;
-
+  
   const ProfileDrawer({super.key, required this.fullName, required this.email});
 
   @override

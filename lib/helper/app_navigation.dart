@@ -153,7 +153,7 @@ Route<dynamic> generateRouteSettings(RouteSettings route) {
               create: (context) =>
                   CartScreenBloc(repository: CartScreenRepositoryImp()),
               child: const CartScreen()));
-    case loginSignup:
+    case loginSignup: 
       return MaterialPageRoute(
         builder: (context) => Builder(
           builder: (innerContext) => BlocProvider(
@@ -176,7 +176,7 @@ Route<dynamic> generateRouteSettings(RouteSettings route) {
               create: (context) => AddEditAddressScreenBloc(
                   repository: AddEditAddressRepositoryImp()),
               child: AddEditAddress(
-                addressEndpoint: endpoint,
+                addressEndpoint: endpoint, 
               )));
     case guestCheckoutScreen:
       CartViewModel? cartViewModel;

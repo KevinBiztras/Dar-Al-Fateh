@@ -87,7 +87,7 @@ class _NavBarViewState extends State<NavBarView> {
       //   create: (context) =>
       //       ProfileScreenBloc(repository: ProfileScreenRepositoryImp()),
       //   child: const ProfileScreen(),
-      // )
+      // ),
       BlocProvider(
         create: (context) =>
             ProfileScreenBloc(repository: ProfileScreenRepositoryImp()),

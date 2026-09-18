@@ -46,6 +46,3 @@ const String guestCheckoutScreen = "guestCheckoutScreen";
 const String catalogFilterPage = "catalogFilterPage";
 const String deliveryTrackingScreen = "deliveryTrackingScreen";
 const String catalogSortPage = "catalogSortPage";
-
-
-

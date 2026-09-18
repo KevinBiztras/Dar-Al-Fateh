@@ -36,7 +36,7 @@ import 'package:flutter_project_structure/screens/profile/view/profile_menu.dart
 import '../../constants/route_constant.dart';
 import '../../helper/alert_message.dart';
 import '../../models/AccountInfoModel.dart';
-
+ 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 

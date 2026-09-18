@@ -242,7 +242,7 @@ void callBack(
     case 5:
       Navigator.of(context).pushNamed(wishlist);
       break;
-    // compare
+      // compare
     case 6:
       Navigator.of(context).pushNamed(compareProduct);
       break;
