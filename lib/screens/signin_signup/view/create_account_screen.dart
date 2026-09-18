@@ -23,7 +23,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_project_structure/constants/app_constants.dart';
 import 'package:flutter_project_structure/constants/app_string_constant.dart';
 import 'package:flutter_project_structure/constants/route_constant.dart';
-import 'package:flutter_project_structure/customWidgtes/common_outlined_button.dart';
 import 'package:flutter_project_structure/customWidgtes/common_switch_button.dart';
 import 'package:flutter_project_structure/customWidgtes/common_text_field.dart';
 import 'package:flutter_project_structure/customWidgtes/dialog_helper.dart';
@@ -164,14 +163,100 @@ class _CreateAnAccountState extends State<CreateAnAccount> {
     );
   }
 
+  static const _pageColor = Color(0xFFF4FAF6);
+  static const _fieldColor = Color(0xFFF8F5F0);
+  static const _greenColor = Color(0xFF2E7D32);
+  static const _linkColor = Color(0xFF806B43);
+  static const _textColor = Color(0xFF1C241D);
+
   Widget _buildContent() {
+    final baseTheme = Theme.of(context);
+    final roundedBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(20),
+      borderSide: const BorderSide(color: Color(0xFFD6D9D2)),
+    );
+
+    // Scoped to this screen. Retain the shared fields and toolbar so their
+    // validators, password controls, and navigation behavior stay intact.
+    return Theme(
+      data: baseTheme.copyWith(
+        scaffoldBackgroundColor: _pageColor,
+        colorScheme: baseTheme.colorScheme.copyWith(
+          primary: _greenColor,
+          onPrimary: Colors.white,
+          secondary: _greenColor,
+          surface: _pageColor,
+          onSurface: _textColor,
+        ),
+        appBarTheme: baseTheme.appBarTheme.copyWith(
+          backgroundColor: _pageColor,
+          foregroundColor: _textColor,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          surfaceTintColor: Colors.transparent,
+          centerTitle: true,
+          iconTheme: const IconThemeData(color: _textColor, size: 20),
+          titleTextStyle: const TextStyle(
+            color: _textColor, fontSize: 20, fontWeight: FontWeight.w600,
+          ),
+        ),
+        textTheme: baseTheme.textTheme.copyWith(
+          titleMedium: baseTheme.textTheme.titleMedium?.copyWith(
+            color: _textColor, fontSize: 18, fontWeight: FontWeight.w400,
+          ),
+        ),
+        inputDecorationTheme: baseTheme.inputDecorationTheme.copyWith(
+          filled: true,
+          fillColor: _fieldColor,
+          contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16, vertical: 14),
+          hintStyle: const TextStyle(
+              color: Color(0xFF94948E), fontSize: 18),
+          labelStyle: const TextStyle(color: _textColor, fontSize: 18),
+          border: roundedBorder,
+          enabledBorder: roundedBorder,
+          focusedBorder: roundedBorder.copyWith(
+            borderSide: const BorderSide(
+                color: Color(0xFFD9CEB8), width: 2),
+          ),
+          errorBorder: roundedBorder.copyWith(
+            borderSide: BorderSide(color: baseTheme.colorScheme.error),
+          ),
+          focusedErrorBorder: roundedBorder.copyWith(
+            borderSide: BorderSide(
+                color: baseTheme.colorScheme.error, width: 2),
+          ),
+        ),
+        textSelectionTheme: baseTheme.textSelectionTheme.copyWith(
+          cursorColor: _linkColor,
+          selectionColor: _greenColor.withOpacity(0.2),
+          selectionHandleColor: _greenColor,
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: _linkColor,
+            textStyle: const TextStyle(fontSize: 14),
+          ),
+        ),
+      ),
+      child: Builder(
+        builder: (themedContext) => SafeArea(
+          top: false,
+          child: _buildStyledContent(themedContext),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStyledContent(BuildContext context) {
     return Scaffold(
+      backgroundColor: _pageColor,
       appBar: commonToolBar(
           _localizations?.translate(AppStringConstant.createAnAccount) ?? "",
           context,
           isLeadingEnable: true),
       body: Padding(
-        padding: const EdgeInsets.all(AppSizes.imageRadius),
+        padding: const EdgeInsets.fromLTRB(32, 16, 32, 24),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -183,6 +268,7 @@ class _CreateAnAccountState extends State<CreateAnAccount> {
                   height: AppSizes.normalPadding,
                 ),
                 CommonTextField(
+                  useAccountStyle: true,
                   controller: _emailController,
                   isPassword: false,
                   hintText: _localizations
@@ -195,6 +281,7 @@ class _CreateAnAccountState extends State<CreateAnAccount> {
 
                 const SizedBox(height: AppSizes.extraPadding),
                 CommonTextField(
+                  useAccountStyle: true,
                   controller: _nameController,
                   isRequired: true,
                   isPassword: false,
@@ -206,6 +293,7 @@ class _CreateAnAccountState extends State<CreateAnAccount> {
                 const SizedBox(height: AppSizes.extraPadding),
 
                 CommonTextField(
+                  useAccountStyle: true,
                   hintText:
                       _localizations?.translate(AppStringConstant.password) ??
                           "",
@@ -217,6 +305,7 @@ class _CreateAnAccountState extends State<CreateAnAccount> {
                 ),
                 const SizedBox(height: AppSizes.extraPadding),
                 CommonTextField(
+                  useAccountStyle: true,
                   hintText: _localizations
                           ?.translate(AppStringConstant.confirmPassword) ??
                       "",
@@ -271,8 +360,8 @@ class _CreateAnAccountState extends State<CreateAnAccount> {
                                   .titleSmall
                                   ?.copyWith(
                                       fontWeight: FontWeight.w400,
-                                      fontSize: 13,
-                                      color: AppColors.textBlue))),
+                                      fontSize: 14,
+                                      color: _linkColor))),
                     ],
                   ),
                 ),
@@ -286,30 +375,47 @@ class _CreateAnAccountState extends State<CreateAnAccount> {
 
                 /// Signup
 
-                commonButton(
-                    context,
-                    _validateForm,
-                    (_localizations?.translate(
-                                AppStringConstant.createAnAccount) ??
-                            "")
-                        .toUpperCase(),
-                    backgroundColor: Theme.of(context).colorScheme.onPrimary,
-                    borderSideColor: Theme.of(context).colorScheme.onPrimary,
-                    textColor:
-                        Theme.of(context).colorScheme.secondaryContainer),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _validateForm,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _greenColor,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      minimumSize: const Size(double.infinity, 48),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      textStyle: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w400),
+                    ),
+                    child: Text(
+                      _localizations?.translate(
+                              AppStringConstant.createAnAccount) ?? '',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
                 const SizedBox(height: AppSizes.extraPadding),
 
                 /// Loging
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Center(
+                  child: Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 4,
                   children: [
                     Text(
                         _localizations
                                 ?.translate(AppStringConstant.alreadyAccount)
-                                .toUpperCase() ??
+ ??
                             '',
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.w400, fontSize: 13)),
+                            fontWeight: FontWeight.w400, fontSize: 14,
+                            color: _linkColor)),
                     TextButton(
                         onPressed: () {
                           Navigator.pop(context);
@@ -319,17 +425,18 @@ class _CreateAnAccountState extends State<CreateAnAccount> {
                             (_localizations
                                         ?.translate(AppStringConstant.signIn) ??
                                     '')
-                                .toUpperCase(),
+,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleSmall
                                 ?.copyWith(
                                     fontWeight: FontWeight.w400,
-                                    fontSize: 13,
-                                    color: AppColors.textBlue)))
+                                    fontSize: 14,
+                                    color: _linkColor)))
                   ],
                 ),
 
+                ),
                 const SizedBox(height: AppSizes.extraPadding),
               ],
             ),
