@@ -6,6 +6,7 @@ import 'package:flutter_project_structure/constants/app_constants.dart';
 import 'package:flutter_project_structure/helper/app_localizations.dart';
 import 'package:flutter_project_structure/screens/accountInfoCustom/views/list_tile_widget.dart';
 import 'package:flutter_project_structure/screens/accountInfoCustom/views/profile_drawer.dart';
+import 'package:flutter_project_structure/screens/myAddress/my_address.dart';
 
 const List<Map<String, dynamic>> orderItems = [
   {
@@ -105,7 +106,15 @@ class _AccountScreenCustomState extends State<AccountScreenCustom> {
                     title: 'My Address',
                     subtitle: 'Manage your delivery and billing addresses',
                     image: 'lib/assets/images/location.png',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return MyAddress();
+                          },
+                        ),
+                      );
+                    },
                   ),
 
                   const SizedBox(height: 10),

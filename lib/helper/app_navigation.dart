@@ -196,6 +196,8 @@ Route<dynamic> generateRouteSettings(RouteSettings route) {
               create: (context) =>
                   AddressBookScreenBloc(repository: AddressBookRepositoryImp()),
               child: AddressBook()));
+    case myAddressListPage:
+      
     case walkThrough:
       WalkThroughModel? walkThroughModel;
       if (args != null) {
