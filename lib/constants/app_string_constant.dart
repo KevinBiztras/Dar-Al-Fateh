@@ -51,7 +51,7 @@ class AppStringConstant {
   static const String inStock = "inStock";
   static const String only = "only";
   static const String left = "left";
-  static const String basedOn = "basedOn";
+  static const String basedOn = "basedOn"; 
   static const String one = "1";
   static const String two = "2";
   static const String three = "3";

@@ -16,7 +16,6 @@
 
  */
 
-
 const String home = 'homeScreen';
 const String splash = 'splashScreen';
 const String navBar = 'navigationBar';
@@ -46,6 +45,4 @@ const String guestCheckoutScreen = "guestCheckoutScreen";
 const String catalogFilterPage = "catalogFilterPage";
 const String deliveryTrackingScreen = "deliveryTrackingScreen";
 const String catalogSortPage = "catalogSortPage";
-
-
-
+const String myAddressListPage = "myAddressListPage";

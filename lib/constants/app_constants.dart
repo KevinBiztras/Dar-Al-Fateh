@@ -125,20 +125,4 @@ class AppColors {
   static const lightBlue = Color(0xCFD9D0F6);
 }
 
-const List<Map<String, dynamic>> orderItems = [
-  {
-    'title': 'Your Orders',
-    'subtitle': 'Follow, view or pay your orders',
-    'image': 'lib/assets/images/bag.png',
-  },
-  {
-    'title': 'Your Invoices',
-    'subtitle': 'Follow, download or pay your invoices',
-    'image': 'lib/assets/images/bill.png',
-  },
-  {
-    'title': 'Connection & Security',
-    'subtitle': 'Configure your connection parameters',
-    'image': 'lib/assets/images/portal-connection.png',
-  },
-];
+
